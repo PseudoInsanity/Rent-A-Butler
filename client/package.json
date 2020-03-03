@@ -15,8 +15,6 @@
   "main": "index.js",
   "scripts": {
     "start": "cd ./client && react-scripts start",
-    "start:dev:server": "cd ./server && npm run start:dev",
-    "start:dev:client": "cd ./client && npm run start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
