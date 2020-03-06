@@ -6,22 +6,22 @@ import {
     palette: {
       type: 'dark',
       primary: {
-        main: '#002B55', // terminal blue
+        main: '#E0E2E1', // White-Grey
         light: '#D0E6DA', // northern light
       },
       secondary: {
-        main: '#80C565', // leet green
-        light: '#E9F6F6', // nordic snow
+        main: '#FFD9DA', // Pail Pink
+        light: '#94D1CA', // Pale Robin Egg Blue
       },
       background: {
-        main: '#26282A', // server rack
+        main: '#22333B', // Dark Blue-Grey
         light: '#4F565F', // katana grey
       },
       error: {
         main: '#DC3545', // material error
       },
       warning: {
-        main: '#FFC107', // material warning
+        main: '#4F565F', // material warning
       },
       success: {
         main: '#28A745', // material success

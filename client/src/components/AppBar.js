@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   appbarColor: {
-    color: theme.palette.secondary.main,
+    backgroundColor: theme.palette.background.main,
+    color: theme.palette.secondary.light,
   },
 }));
 
@@ -25,14 +26,6 @@ export default function Header({ flipTheme }) {
         <Typography className={classes.title} variant="h5">
           rent A butler
         </Typography>
-        <IconButton
-          onClick={flipTheme}
-          edge="end"
-          aria-label="switch between dark and light theme"
-          color="inherit"
-        >
-          <Brightness4 />
-        </IconButton>
         <IconButton
           edge="end"
           aria-label="account button"
