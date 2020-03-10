@@ -1,7 +1,18 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, Typography, Paper, TextField, Button, IconButton, FormControl, InputAdornment, InputLabel, FilledInput } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import FilledInput from '@material-ui/core/FilledInput';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import Link from "react-router-dom/Link";
+
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -25,8 +36,23 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'Gotham Pro, Montserrat, sans-serif',
         fontWeight: 'bold',
         justifyContent: 'space-around',
-        paddingLeft: '125px',
+        paddingLeft: '100px',
         padding: theme.spacing(7),
+    },
+    signup: {
+        '& > * + *': {
+            marginLeft: theme.spacing(2),
+        },
+        display: 'flex',
+        color: theme.palette.background.main,
+        fontFamily: 'Gotham pro, Montserrat, sans-serif',
+        justifyContent: 'center',
+    },
+    here: {
+        color: theme.palette.secondary.light,
+        justifyContent: 'center',
+        display: 'flex',
+        fontFamily: 'Gotham pro, Montserrat, sans-serif',
     },
     root: {
         '& > *': {
@@ -51,7 +77,8 @@ const useStyles = makeStyles((theme) => ({
         width: '160px',
         display: 'flex',
         margin: 'auto',
-        marginTop: 50,
+        marginTop: 30,
+        marginBottom: 15,
         fontWeight: '550',
     },
     textField: {
@@ -85,6 +112,7 @@ function LoginComponent() {
     const handleMouseDownPassword = event => {
         event.preventDefault();
     };
+
     return (
         <div className={classes.container}>
             <Paper className={classes.box} elevation={3}>
@@ -120,7 +148,13 @@ function LoginComponent() {
                     color="secondary"
                 >
                     LOGIN
-        </Button>
+                </Button>
+                <Typography className={classes.signup} variant="h6">
+                    Dont have an account?
+                </Typography>
+                <Link className={classes.here} to="./signup">
+                    Signup here!
+                </Link>
             </Paper>
         </div>
     );

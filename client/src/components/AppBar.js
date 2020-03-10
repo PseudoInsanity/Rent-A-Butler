@@ -1,10 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import {
-  AppBar, IconButton, Toolbar, Typography,
-} from '@material-ui/core';
-import { AccountCircle, Brightness4 } from '@material-ui/icons/';
+import AppBar from '@material-ui/core/Appbar';
+import IconButton from '@material-ui/core/IconButton';
+import Toolbar from '@material-ui/core/Toolbar'; 
+import Typography from '@material-ui/core/Typography';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header({ flipTheme }) {
+export default function Appbar({ flipTheme }) {
   const classes = useStyles();
   return (
     <AppBar className={classes.appbarColor} position="static">
@@ -39,6 +40,6 @@ export default function Header({ flipTheme }) {
   );
 }
 
-Header.propTypes = {
+Appbar.propTypes = {
   flipTheme: PropTypes.oneOfType([PropTypes.func]).isRequired,
 };
