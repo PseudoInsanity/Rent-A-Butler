@@ -8,7 +8,7 @@ const middleware = require("./middleware/index.js");
 /* MongoDB */
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const url = 'mongodb://localhost:27017,localhost:27018/?replicaSet=foo';
+const url = 'mongodb://localhost:27017';
 const dbName = 'rent-a-butler';
 const client = new MongoClient(url);
 
@@ -27,6 +27,7 @@ app.set("view engine", "ejs");
 
 app.use(middleware.logIncomingToConsole);
 app.listen(port, logStartUpDetailsToConsole);
+
 
 function logStartUpDetailsToConsole () {
     let routes = [];
