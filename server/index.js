@@ -3,23 +3,30 @@
 const port = process.env.DBWEBB_PORT || 1337;
 const express = require("express");
 const app = express();
-const routeLotto = require("./route/lotto.js");
 const middleware = require("./middleware/index.js");
+
+/* MongoDB */
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const url = 'mongodb://localhost:27017,localhost:27018/?replicaSet=foo';
+const dbName = 'rent-a-butler';
+const client = new MongoClient(url);
+
+client.connect(function(err) {
+    assert.equal(null, err);
+    console.log("Connected correctly to server");
+  
+    const db = client.db(dbName);
+  
+    client.close();
+  });
+
+  /* Mongo End */
 
 app.set("view engine", "ejs");
 
 app.use(middleware.logIncomingToConsole);
-app.use("/lotto", routeLotto);
-app.use(express.static(__dirname + "/public"));
 app.listen(port, logStartUpDetailsToConsole);
-
-app.get("/report", (req, res) => {
-    res.sendFile(__dirname + "/public/report/me.html");
-});
-
-app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/public/node/index.html");
-});
 
 function logStartUpDetailsToConsole () {
     let routes = [];
