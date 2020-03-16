@@ -11,17 +11,36 @@ const assert = require('assert');
 const url = 'mongodb://localhost:27017';
 const dbName = 'rent-a-butler';
 const client = new MongoClient(url);
+let db;
 
 client.connect(function(err) {
     assert.equal(null, err);
     console.log("Connected correctly to server");
   
-    const db = client.db(dbName);
-  
-    client.close();
+    db = client.db(dbName);
+
+    var myobj = { name: "Bajs Bajs", address: "Highway 37" };
+    db.collection("users").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    });
+
+
   });
 
   /* Mongo End */
+
+  app.get("/test", (req, res) => {
+
+    db = client.db(dbName);
+    var myobj = { name: "Test Test", address: "Highway 37" };
+    db.collection("users").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+    });
+
+    res.send("OK");
+  });
 
 app.set("view engine", "ejs");
 
