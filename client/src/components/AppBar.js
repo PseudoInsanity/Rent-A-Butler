@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/Appbar';
 import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar'; 
@@ -14,12 +13,12 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   appbarColor: {
-    backgroundColor: theme.palette.background.main,
+    backgroundColor: theme.palette.background.light,
     color: theme.palette.secondary.light,
   },
 }));
 
-export default function Appbar({ flipTheme }) {
+export default function Appbar() {
   const classes = useStyles();
   return (
     <AppBar className={classes.appbarColor} position="static">
@@ -39,7 +38,3 @@ export default function Appbar({ flipTheme }) {
     </AppBar>
   );
 }
-
-Appbar.propTypes = {
-  flipTheme: PropTypes.oneOfType([PropTypes.func]).isRequired,
-};

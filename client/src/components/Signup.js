@@ -1,37 +1,13 @@
 import React from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import FormControl from '@material-ui/core/FormControl';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import InputLabel from '@material-ui/core/InputLabel';
-import FilledInput from '@material-ui/core/FilledInput';
 import Grid from '@material-ui/core/Grid';
-import Link from "react-router-dom/Link";
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox'
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        margin: theme.spacing(1),
-        width: theme.spacing(60),
-        height: theme.spacing(70),
-
-    },
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
@@ -63,16 +39,6 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: '40dp',
         padding: theme.spacing(7),
     },
-    signup: {
-        '& > * + *': {
-            marginLeft: theme.spacing(2),
-        },
-        display: 'flex',
-        color: theme.palette.background.main,
-        fontFamily: 'Gotham pro, Montserrat, sans-serif',
-        justifyContent: 'center',
-    },
-
     formField: {
         backgroundColor: theme.palette.background.light,
         color: theme.palette.secondary.dark,
@@ -91,39 +57,11 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 10,
         fontWeight: '550',
     },
-    textField: {
-        marginTop: 10,
-        width: 250,
-        height: 50,
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.background.light,
-        color: theme.palette.secondary.main,
-        '&>*': {
-            color: theme.palette.secondary.main,
-        },
-    },
 }));
 
 
 function Signup() {
     const classes = useStyles();
-    const [values, setValues] = React.useState({
-        password: '',
-        showPassword: false,
-    });
-
-    const handleChange = prop => event => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
-
-    const handleClickShowPassword = () => {
-        setValues({ ...values, showPassword: !values.showPassword });
-    };
-
-    const handleMouseDownPassword = event => {
-        event.preventDefault();
-    };
-
 
     return (
         <div className={classes.container}>
@@ -186,7 +124,8 @@ function Signup() {
                             <Button
                                 className={classes.button}
                                 type="submit"
-                                variant="contained">
+                                variant="contained"
+                                color="secondary">
                                 Sign Up
                             </Button>
                         </Grid>

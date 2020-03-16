@@ -1,24 +1,25 @@
 import React from 'react';
-import AppBar from './components/AppBar';
-import Signup from './components/Signup';
 import Login from './components/Login';
+import { PrivateRoute } from './components/PrivateRoute'
+import StartPage from './components/StartPage';
 import { ThemeProvider } from '@material-ui/core/styles';
 import darkTheme from './themes/darkTheme';
-import BrowserRouter from "react-router-dom/BrowserRouter";
-import Switch from "react-router-dom/Switch";
-import Route from "react-router-dom/Route";
+import {BrowserRouter, Switch, Route} from "react-router-dom/";
 
 function App() {
 
     return (
-        <BrowserRouter>
-            <ThemeProvider theme={darkTheme} >
+        <ThemeProvider theme={darkTheme}>
+        <StartPage/>
+        </ThemeProvider>
+      /*  <BrowserRouter>
+            <ThemeProvider theme={darkTheme}>
                 <Switch>
-                    <Route path="/" exact component={Login} />
-                    <Route path="/signup" exact component={Signup} />
+                    <PrivateRoute exact path="/" component={StartPage} />
+                    <Route exact path="/login" component={Login} />
                 </Switch>
             </ThemeProvider>
-        </BrowserRouter>
+        </BrowserRouter>*/
     );
 }
 
