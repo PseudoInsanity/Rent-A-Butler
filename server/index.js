@@ -4,6 +4,7 @@ const port = process.env.DBWEBB_PORT || 1337;
 const express = require("express");
 const app = express();
 const middleware = require("./middleware/index.js");
+const mongo = require("./mongodb/mongo.js")
 
 /* MongoDB */
 const MongoClient = require('mongodb').MongoClient;
@@ -18,36 +19,21 @@ client.connect(function(err) {
     console.log("Connected correctly to server");
   
     db = client.db(dbName);
-
-    var myobj = { name: "Bajs Bajs", address: "Highway 37" };
-    db.collection("users").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    });
-
-
+    mongo.dbInit(db);
   });
 
-  /* Mongo End */
+  /* REST calls */
+    app.get("/test", (req, res) => {
 
-  app.get("/test", (req, res) => {
 
-    db = client.db(dbName);
-    var myobj = { name: "Test Test", address: "Highway 37" };
-    db.collection("users").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    });
-
+    mongo.test();
     res.send("OK");
   });
 
-app.set("view engine", "ejs");
 
+app.set("view engine", "ejs");
 app.use(middleware.logIncomingToConsole);
 app.listen(port, logStartUpDetailsToConsole);
-
-
 function logStartUpDetailsToConsole () {
     let routes = [];
 
