@@ -2,31 +2,31 @@
     {
         "name": "Grocery Shopping",
         "description": "I will do your grocery shopping for you",
-        "time_remaining": ""
+        "price": "$12"
     },
     {
         "name": "House maid",
         "description": "I will do your house cleaning",
-        "time_remaining": ""
+        "price": "$10"
     },
     {
         "name": "Car washing",
         "description": "I will wash your car for you",
-        "time_remaining": ""
+        "price": "$20"
     },
     {
         "name": "Dog walking",
         "description": "I will walk your dogs for you",
-        "time_remaining": ""
+        "price": "$5"
     },
     {
         "name": "Taking the kids to school",
         "description": "I will take your kids to school.. not a pedophile",
-        "time_remaining": ""
+        "price": "$15"
     },
     {
         "name": "Gardening",
         "description": "I will take care of your garden for you",
-        "time_remaining": ""
+        "price": "$30"
     }
 ]
