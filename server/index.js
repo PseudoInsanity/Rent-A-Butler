@@ -2,12 +2,14 @@
 
 const port = process.env.DBWEBB_PORT || 1337;
 const express = require("express");
+var bodyParser = require('body-parser')
 const app = express();
 const middleware = require("./middleware/index.js");
-const mongo = require("./mongodb/mongo.js")
+const mongo = require("./mongodb/mongo.js");
+var jsonParser = bodyParser.json()
 
 /* MongoDB */
-const MongoClient = require('mongodb').MongoClient;
+const {MongoClient, ObjectId } = require('mongodb');
 const assert = require('assert');
 const url = 'mongodb://localhost:27017';
 const dbName = 'rent-a-butler';
@@ -19,15 +21,43 @@ client.connect(function(err) {
     console.log("Connected correctly to server");
   
     db = client.db(dbName);
-    mongo.dbInit(db);
+    mongo.dbInit(db, assert, ObjectId);
   });
 
   /* REST calls */
-    app.get("/test", (req, res) => {
-
+app.get("/test", (req, res) => {
 
     mongo.test();
     res.send("OK");
+  });
+
+app.post("/service", jsonParser, (req, res) => {
+
+    var response = mongo.addService(req);
+
+    res.send(response);
+});
+
+app.get("/service", jsonParser, (req, res) => {
+
+    mongo.getAllServices(res);
+});
+
+app.put("/service", jsonParser, (req, res) => {
+
+    var response = mongo.changeSubscriber(req);
+
+    res.send(response);
+});
+
+app.post("/createUser", jsonParser, (req, res) => {
+    mongo.createUser(req);
+    res.send("createUser");
+  });
+
+  app.post("/login", jsonParser, (req, res) => {
+    mongo.login(req);
+    res.send("Login")
   });
 
 
