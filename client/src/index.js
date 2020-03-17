@@ -7,7 +7,6 @@ import * as serviceWorker from './serviceWorker';
 // setup fake backend
 import configureFakeBackend  from './helpers/fake-backend';
 configureFakeBackend();
-debugger;
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
