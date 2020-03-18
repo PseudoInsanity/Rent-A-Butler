@@ -3,10 +3,13 @@
 const port = process.env.DBWEBB_PORT || 1337;
 const express = require("express");
 var bodyParser = require('body-parser')
+var cors = require('cors')
 const app = express();
 const middleware = require("./middleware/index.js");
 const mongo = require("./mongodb/mongo.js");
-var jsonParser = bodyParser.json()
+
+var jsonParser = bodyParser.json();
+app.use(cors());
 
 /* MongoDB */
 const {MongoClient, ObjectId } = require('mongodb');
