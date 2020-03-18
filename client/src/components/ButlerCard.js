@@ -13,7 +13,7 @@ import Grid from "@material-ui/core/Grid";
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 345,
-    maxWidth: 600,
+    maxWidth: 350,
     margin: 20,
     flex: "1 0 20"
   },

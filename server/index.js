@@ -56,7 +56,7 @@ mongo.login(req, res);
 
 
 app.set("view engine", "ejs");
-app.use(middleware.logIncomingToConsole);
+app.use((middleware.logIncomingToConsole);
 app.listen(port, logStartUpDetailsToConsole);
 function logStartUpDetailsToConsole () {
     let routes = [];

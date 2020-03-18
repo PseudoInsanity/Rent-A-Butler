@@ -100,6 +100,10 @@ function StartPage() {
 
     }
 
+    const stopPropagationForTab = (event) => {
+          event.stopPropagation();
+      };
+
     const renderAddServiceMenu = (
         <Menu
             anchorEl={anchorEl}
@@ -109,6 +113,7 @@ function StartPage() {
             open={isMenuOpen}
             onClose={handleMenuClose}
             className={classes.menu}
+            onKeyDown={stopPropagationForTab}
         >
             <form className={classes.root} noValidate autoComplete="off">
                 <TextField id="standard-basic" label="Name of service" />
@@ -147,7 +152,6 @@ function StartPage() {
                     handleOpen={handleOpen}
                 />
             </Grid>
-    
             {renderAddServiceMenu}
         </div>
     );
