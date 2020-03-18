@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
-import { makeStyles, Typography, Paper, TextField, Button, IconButton, FormControl, InputAdornment, InputLabel, FilledInput } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import FilledInput from '@material-ui/core/FilledInput';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { Link, useHistory } from "react-router-dom";
+import Grid from '@material-ui/core/Grid';
+import { userService } from '../services/user.service';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -25,8 +37,23 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'Gotham Pro, Montserrat, sans-serif',
         fontWeight: 'bold',
         justifyContent: 'space-around',
-        paddingLeft: '125px',
+        paddingLeft: '110px',
         padding: theme.spacing(7),
+    },
+    signup: {
+        '& > * + *': {
+            marginLeft: theme.spacing(2),
+        },
+        display: 'flex',
+        color: theme.palette.background.main,
+        fontFamily: 'Gotham pro, Montserrat, sans-serif',
+        justifyContent: 'center',
+    },
+    here: {
+        color: theme.palette.secondary.light,
+        justifyContent: 'center',
+        display: 'flex',
+        fontFamily: 'Gotham pro, Montserrat, sans-serif',
     },
     root: {
         '& > *': {
@@ -51,7 +78,8 @@ const useStyles = makeStyles((theme) => ({
         width: '160px',
         display: 'flex',
         margin: 'auto',
-        marginTop: 50,
+        marginTop: 30,
+        marginBottom: 15,
         fontWeight: '550',
     },
     textField: {
@@ -69,8 +97,14 @@ const useStyles = makeStyles((theme) => ({
 
 function LoginComponent() {
     const classes = useStyles();
-    const [values, setValues] = React.useState({
+    const history = useHistory();
+    const [username, setUsername] = useState('');
+    const [values, setValues] = useState({
+        username: '',
         password: '',
+        submitted: false,
+        loading: false,
+        error: '',
         showPassword: false,
     });
 
@@ -85,12 +119,38 @@ function LoginComponent() {
     const handleMouseDownPassword = event => {
         event.preventDefault();
     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        setValues({ submitted: true });
+        const { username, password } = values;
+
+        if (!(username && password)) {
+            return;
+        }
+
+        setValues({ loading: true });
+        
+        await userService.login(username, password)
+            .then(
+                user => {
+                    const { from } = history.location || { from: { pathname: "/" } };
+                    history.push(from);
+
+                },
+                error => setValues({ error, loading: false })
+
+            );
+        setValues({ username: '', password: '' });
+    }
+
     return (
         <div className={classes.container}>
             <Paper className={classes.box} elevation={3}>
                 <Typography className={classes.title} variant="h3">RENT A BUTLER</Typography>
                 <form className={classes.root} noValidate autoComplete="off">
-                    <TextField className={classes.formField} label="Username" variant="filled" color="secondary" />
+                    <TextField className={classes.formField} label="Username" value={values.username} onChange={handleChange('username')} variant="filled" color="secondary" />
                 </form>
                 {/* password field */}
                 <FormControl className={clsx(classes.textField)} type="password" autoComplete="current-password" variant="filled" color="secondary">
@@ -118,9 +178,17 @@ function LoginComponent() {
                     variant="contained"
                     className={classes.button}
                     color="secondary"
-                >
+                    onClick={handleSubmit}>
                     LOGIN
-        </Button>
+                </Button>
+                <Typography className={classes.signup} variant="h6">
+                    Dont have an account?
+                </Typography>
+                <Grid container justify="center">
+                    <Link to="./signup" variant="body2">
+                        Signup here!
+                </Link>
+                </Grid>
             </Paper>
         </div>
     );
