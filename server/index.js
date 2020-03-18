@@ -33,9 +33,7 @@ app.get("/test", (req, res) => {
 
 app.post("/service", jsonParser, (req, res) => {
 
-    var response = mongo.addService(req);
-
-    res.send(response);
+    mongo.addService(req, res);
 });
 
 app.get("/service", jsonParser, (req, res) => {
@@ -45,9 +43,12 @@ app.get("/service", jsonParser, (req, res) => {
 
 app.put("/service", jsonParser, (req, res) => {
 
-    var response = mongo.changeSubscriber(req);
+    mongo.changeSubscriber(req, res);
+});
 
-    res.send(response);
+app.get("/service/:userId", (req, res) => {
+
+    mongo.getUserSubscriptions(req.params.userId, res);
 });
 
 app.post("/createUser", jsonParser, (req, res) => {
