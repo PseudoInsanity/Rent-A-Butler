@@ -47,9 +47,7 @@ function StartPage() {
     const handleSubscribe = () => {
         setOpen(false);
 
-        if (listOfSubscribedServices.id === subscribedService.id) {
-            console.log(listOfSubscribedServices);
-            console.log(subscribedService.id);
+        if (!(listOfSubscribedServices.includes(subscribedService))) {
             setListOfSubscribedServices([
                 ...listOfSubscribedServices,
                 subscribedService
@@ -71,7 +69,7 @@ function StartPage() {
                 List of services
             </Typography>
             <ColoredLine color="#22333B" />
-            <Grid container xs={12} className={classes.grid}>
+            <Grid item xs={12} className={classes.grid}>
                 <ButlerCard
                     open={open}
                     handleClose={handleClose}
