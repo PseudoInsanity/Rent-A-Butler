@@ -46,10 +46,15 @@ function StartPage() {
 
     const handleSubscribe = () => {
         setOpen(false);
-        setListOfSubscribedServices([
-            ...listOfSubscribedServices,
-            subscribedService
-        ]);
+
+        if (listOfSubscribedServices.id === subscribedService.id) {
+            console.log(listOfSubscribedServices);
+            console.log(subscribedService.id);
+            setListOfSubscribedServices([
+                ...listOfSubscribedServices,
+                subscribedService
+            ]);
+        }
     };
 
     useEffect(() => { }, [subscribedService, listOfSubscribedServices]);

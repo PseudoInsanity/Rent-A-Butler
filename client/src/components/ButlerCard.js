@@ -75,7 +75,7 @@ function ButlerCard({
               color="primary"
               onClick={() => handleOpen(item)}
             >
-              {subscribeButtonText(item.name)}
+              {subscribeButtonText(item)}
             </Button>
             <Button size="small" color="primary">
               Learn More
