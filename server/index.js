@@ -52,11 +52,15 @@ app.post("/createUser", jsonParser, (req, res) => {
 
 app.post("/login", jsonParser, (req, res) => {
 mongo.login(req, res);
+console.log(mongo);
 });
 
 
 app.set("view engine", "ejs");
-app.use(middleware.logIncomingToConsole);
+app.use((req, res, next,) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
 app.listen(port, logStartUpDetailsToConsole);
 function logStartUpDetailsToConsole () {
     let routes = [];

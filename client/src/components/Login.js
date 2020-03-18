@@ -135,8 +135,7 @@ function LoginComponent() {
         await userService.login(username, password)
             .then(
                 user => {
-                    const { from } = history.location || { from: { pathname: "/" } };
-                    history.push(from);
+                    history.push('/');
 
                 },
                 error => setValues({ error, loading: false })
@@ -182,7 +181,7 @@ function LoginComponent() {
                     LOGIN
                 </Button>
                 <Typography className={classes.signup} variant="h6">
-                    Dont have an account?
+                    Don't have an account?
                 </Typography>
                 <Grid container justify="center">
                     <Link to="./signup" variant="body2">

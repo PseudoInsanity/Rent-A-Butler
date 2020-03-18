@@ -91,16 +91,18 @@ module.exports = {
 
   login: function (req, res) {
     var userAuth = req.body;
-    console.log(userAuth);
     db.collection('users').findOne({ username: req.body.username}, function(err, user) {
 
       if(err) {
         res.send({success: 0})
+        console.log(err);
       } 
       if (user && user.password === req.body.password && user && user.userName === req.body.userName){
         res.send({success: 1});
+        console.log(user)
       } else {
         res.send({success: 0});
+        console.log('fail');
       }              
     });
   }
