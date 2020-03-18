@@ -18,15 +18,6 @@ module.exports = {
     }
   },
 
-  test: function () {
-
-    var myobj = { name: "Test Test", address: "Test" };
-    db.collection("users").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    });
-  },
-
   addService: function (req, res) {
 
     var myObj = req.body;
@@ -86,19 +77,31 @@ module.exports = {
     });
   },
 
-  createUser: function (req) {
+  createUser: function (req, res) {
     var newUser = req.body;
     var structeredUser = { firstName: newUser.firstName, lastName: newUser.lastName, userName: newUser.userName, password: newUser.password};
-    console.log(structeredUser)
 
-    db.collection("users").insertOne(structeredUser, function(err, res) {
-        if (err) throw err;
-        console.log("1 document inserted(req json)");
-        });
+    db.collection("users").insertOne(structeredUser, function(err, item) {
+      if (err) {
+        res.send({succes: 0});
+      } else if (item){
+        res.send({succes: 1});
+      }});
   },
 
-  login: function (req) {
+  login: function (req, res) {
     var userAuth = req.body;
- 
+    console.log(userAuth);
+    db.collection('users').findOne({ username: req.body.username}, function(err, user) {
+
+      if(err) {
+        res.send({success: 0})
+      } 
+      if (user && user.password === req.body.password && user && user.userName === req.body.userName){
+        res.send({success: 1});
+      } else {
+        res.send({success: 0});
+      }              
+    });
   }
 };

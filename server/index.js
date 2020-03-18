@@ -22,14 +22,9 @@ client.connect(function(err) {
   
     db = client.db(dbName);
     mongo.dbInit(db, assert, ObjectId);
-  });
+});
 
   /* REST calls */
-app.get("/test", (req, res) => {
-
-    mongo.test();
-    res.send("OK");
-  });
 
 app.post("/service", jsonParser, (req, res) => {
 
@@ -52,14 +47,12 @@ app.get("/service/:userId", (req, res) => {
 });
 
 app.post("/createUser", jsonParser, (req, res) => {
-    mongo.createUser(req);
-    res.send("createUser");
-  });
+    mongo.createUser(req, res);
+});
 
-  app.post("/login", jsonParser, (req, res) => {
-    mongo.login(req);
-    res.send("Login")
-  });
+app.post("/login", jsonParser, (req, res) => {
+mongo.login(req, res);
+});
 
 
 app.set("view engine", "ejs");
