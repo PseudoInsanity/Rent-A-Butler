@@ -11,11 +11,11 @@ async function login(username, password) {
 
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({ username, password })
     };
 
-    return await fetch(`/users/authenticate`, requestOptions)
+    return await fetch(`http://localhost:1337/login`, requestOptions)
         .then(handleResponse)
         .then(user => {
             if (user) {

@@ -9,17 +9,17 @@ import {BrowserRouter, Switch, Route} from "react-router-dom/";
 function App() {
 
     return (
-        <ThemeProvider theme={darkTheme}>
+      /*  <ThemeProvider theme={darkTheme}>
         <StartPage/>
-        </ThemeProvider>
-      /*  <BrowserRouter>
+        </ThemeProvider> */
+        <BrowserRouter>
             <ThemeProvider theme={darkTheme}>
                 <Switch>
                     <PrivateRoute exact path="/" component={StartPage} />
                     <Route exact path="/login" component={Login} />
                 </Switch>
             </ThemeProvider>
-        </BrowserRouter>*/
+        </BrowserRouter>
     );
 }
 

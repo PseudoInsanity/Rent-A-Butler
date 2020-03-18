@@ -4,9 +4,6 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-// setup fake backend
-import configureFakeBackend  from './helpers/fake-backend';
-configureFakeBackend();
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

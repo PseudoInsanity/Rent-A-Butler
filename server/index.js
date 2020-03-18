@@ -52,6 +52,7 @@ app.post("/createUser", jsonParser, (req, res) => {
 
 app.post("/login", jsonParser, (req, res) => {
 mongo.login(req, res);
+console.log(mongo);
 });
 
 
