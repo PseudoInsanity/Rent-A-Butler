@@ -40,6 +40,60 @@ const serviceData = [
     description: "I will take care of your garden for you",
     price: "$10",
     username: "andernilsson"
-  }
+  },  {
+    id: 4,
+    name: "Taking the kids to school",
+    description: "I will take your kids to school.. not a pedophile",
+    price: "$10",
+    username: "johanpersson"
+  },  {
+    id: 4,
+    name: "Taking the kids to school",
+    description: "I will take your kids to school.. not a pedophile",
+    price: "$10",
+    username: "johanpersson"
+  },  {
+    id: 4,
+    name: "Taking the kids to school",
+    description: "I will take your kids to school.. not a pedophile",
+    price: "$10",
+    username: "johanpersson"
+  },  {
+    id: 4,
+    name: "Taking the kids to school",
+    description: "I will take your kids to school.. not a pedophile",
+    price: "$10",
+    username: "johanpersson"
+  },  {
+    id: 4,
+    name: "Taking the kids to school",
+    description: "I will take your kids to school.. not a pedophile",
+    price: "$10",
+    username: "johanpersson"
+  },  {
+    id: 4,
+    name: "Taking the kids to school",
+    description: "I will take your kids to school.. not a pedophile",
+    price: "$10",
+    username: "johanpersson"
+  },  {
+    id: 4,
+    name: "Taking the kids to school",
+    description: "I will take your kids to school.. not a pedophile",
+    price: "$10",
+    username: "johanpersson"
+  },  {
+    id: 4,
+    name: "Taking the kids to school",
+    description: "I will take your kids to school.. not a pedophile",
+    price: "$10",
+    username: "johanpersson"
+  },  {
+    id: 4,
+    name: "Taking the kids to school",
+    description: "I will take your kids to school.. not a pedophile",
+    price: "$10",
+    username: "johanpersson"
+  },
 ];
 export default serviceData;

@@ -22,8 +22,6 @@ async function login(username, password) {
                 user.authdata = window.btoa(username + ':' + password);
                 localStorage.setItem('user', JSON.stringify(user));
             }
-
-            console.log(user);
             return user;
             
         });
