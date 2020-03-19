@@ -37,7 +37,8 @@ function ButlerCard({
   handleSubscribe,
   listOfSubscribedServices,
   setListOfSubscribedServices,
-  handleOpen
+  handleOpen,
+  allServices
 }) {
   const classes = useStyles();
   const subscribeButtonText = item =>
@@ -47,7 +48,7 @@ function ButlerCard({
 
   return (
     <div className={classes.container}>
-      {serviceData.map((item, index) => (
+      {allServices.map((item, index) => (
         <Card className={classes.root} key={index}>
           <CardMedia
             className={classes.media}
@@ -58,14 +59,14 @@ function ButlerCard({
             <Grid container item xs={12}>
               <Grid item xs={11}>
                 <Typography gutterBottom variant="h5" component="h2">
-                  {item.name}
+                  {item.serviceName}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  {item.description}
+                  {item.serviceDescription}
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                <Typography variant="h6">{item.price}</Typography>
+                <Typography variant="h6"> {`$${item.servicePrice}`} </Typography>
               </Grid>
             </Grid>
           </CardContent>
@@ -80,7 +81,9 @@ function ButlerCard({
             <Button size="small" color="primary">
               Learn More
             </Button>
-            <Typography variant="body1" className={classes.username}> {item.username} </Typography>
+            <Typography variant="body1" className={classes.username}>
+              {" "}
+              {item.userName}{" "} </Typography>
           </CardActions>
         </Card>
       ))}

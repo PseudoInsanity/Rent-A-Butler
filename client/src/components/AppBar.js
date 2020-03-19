@@ -92,7 +92,7 @@ export default function Appbar({ listOfSubscribedServices }) {
       <Divider component="li" />
       <List>
         {listOfSubscribedServices.length > 0
-          ? listOfSubscribedServices.map(item =>  <ListItem divider> <ListItemText/> <Typography className={classes.username} variant="body1">{`${item.name} by ${item.username}`}</Typography> </ListItem>)
+          ? listOfSubscribedServices.map(item =>  <ListItem divider> <ListItemText/> <Typography className={classes.username} variant="body1">{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
           : <Typography className={classes.listTitle} variant="h6">No service has been selected yet</Typography>}
       </List>
     </Menu>

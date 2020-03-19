@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
         }
     },
     background: {
-        backgroundColor: theme.palette.primary.light
+        backgroundColor: theme.palette.primary.light,
+        height: '100%'
     },
     grid: {
         display: 'flex',
@@ -63,15 +64,13 @@ function StartPage() {
     const isMenuOpen = Boolean(anchorEl);
     const [subscribedService, setSubscribedService] = useState({});
 
-
-
     const [addedService, setAddedService] = useState({
         serviceName: '',
         serviceDescription: ''
     });
 
     const [
-        { listOfSubscribedServices },
+        { listOfSubscribedServices, allServices },
         { setListOfSubscribedServices }
     ] = useSelectedServices();
 
@@ -96,7 +95,7 @@ function StartPage() {
         }
     };
 
-    useEffect(() => { }, [subscribedService, listOfSubscribedServices]);
+    useEffect(() => {  }, [subscribedService, allServices, listOfSubscribedServices]);
     useEffect(() => { }, [addedService, listOfAddedServices]);
 
     const handleClose = () => {
@@ -184,6 +183,7 @@ function StartPage() {
                     handleSubscribe={handleSubscribe}
                     listOfSubscribedServices={listOfSubscribedServices}
                     setListOfSubscribedServices={setListOfSubscribedServices}
+                    allServices={allServices}
                     handleOpen={handleOpen}
                 />
             </Grid>

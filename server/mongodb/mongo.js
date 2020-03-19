@@ -42,6 +42,7 @@ module.exports = {
       }
     }, function () {
       res.send(result);
+      console.log(result);
     });
   },
 
