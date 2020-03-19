@@ -5,12 +5,14 @@ import { makeStyles } from "@material-ui/core/";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import useSelectedServices from "../hooks/useSelectedServices";
+import useAddedServices from '../hooks/useAddedServices';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Menu from "@material-ui/core/Menu";
 import TextField from '@material-ui/core/TextField';
 import IconButton from "@material-ui/core/IconButton";
 import ToolTip from '@material-ui/core/Tooltip';
+import { userService } from '../services/user.service';
 
 
 const useStyles = makeStyles(theme => ({
@@ -60,10 +62,23 @@ function StartPage() {
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const [subscribedService, setSubscribedService] = useState({});
+
+
+
+    const [addedService, setAddedService] = useState({
+        serviceName: '',
+        serviceDescription: ''
+    });
+
     const [
         { listOfSubscribedServices },
         { setListOfSubscribedServices }
     ] = useSelectedServices();
+
+    const [
+        { listOfAddedServices },
+        { setListOfAddedServices }
+    ] = useAddedServices();
 
     const handleOpen = name => {
         setOpen(true);
@@ -82,10 +97,15 @@ function StartPage() {
     };
 
     useEffect(() => { }, [subscribedService, listOfSubscribedServices]);
+    useEffect(() => { }, [addedService, listOfAddedServices]);
 
     const handleClose = () => {
         setOpen(false);
         setSubscribedService("");
+    };
+
+    const handleChange = prop => event => {
+        setAddedService({ ...addedService, [prop]: event.target.value });
     };
 
     const handleOpenAddService = event => {
@@ -97,12 +117,26 @@ function StartPage() {
     };
 
     const handleAddService = () => {
+        const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+        console.log(userFromLocalStorage);
+        const { serviceName, serviceDescription } = addedService;
 
+        if (!(serviceName && serviceDescription)) {
+            return;
+        }
+
+        setListOfAddedServices([
+            ...listOfAddedServices,
+            serviceName, serviceDescription, userFromLocalStorage[0].user._id
+        ]);
+
+        console.log(listOfAddedServices);
+        userService.addServiceToDatabase(serviceName, serviceDescription, userFromLocalStorage[0].user._id);
     }
 
     const stopPropagationForTab = (event) => {
-          event.stopPropagation();
-      };
+        event.stopPropagation();
+    };
 
     const renderAddServiceMenu = (
         <Menu
@@ -114,10 +148,11 @@ function StartPage() {
             onClose={handleMenuClose}
             className={classes.menu}
             onKeyDown={stopPropagationForTab}
+            getContentAnchorEl={null}
         >
             <form className={classes.root} noValidate autoComplete="off">
-                <TextField id="standard-basic" label="Name of service" />
-                <TextField id="filled-basic" label="Description" />
+                <TextField value={addedService.serviceName} onChange={handleChange('serviceName')} id="standard-basic" label="Name of service" />
+                <TextField value={addedService.serviceDescription} onChange={handleChange('serviceDescription')} id="filled-basic" label="Description" />
                 <IconButton
                     edge="end"
                     aria-label="services button"
@@ -138,9 +173,9 @@ function StartPage() {
             </Typography>
             <ColoredLine color="#22333B" />
             <ToolTip title="Add a new Service!" aria-label="add">
-            <Fab className={classes.fab} aria-label="add" onClick={handleOpenAddService}>
-                <AddIcon />
-            </Fab>
+                <Fab className={classes.fab} aria-label="add" onClick={handleOpenAddService}>
+                    <AddIcon />
+                </Fab>
             </ToolTip>
             <Grid item xs={12} className={classes.grid}>
                 <ButlerCard

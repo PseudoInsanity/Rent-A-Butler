@@ -2,7 +2,7 @@ let db = null;
 let assert = null;
 let ObjectId = null;
 
-function callback (res) {
+function callback(res) {
 
   result = res;
 };
@@ -22,12 +22,13 @@ module.exports = {
 
     var myObj = req.body;
     myObj.subscriber = "None";
-    db.collection("services").insertOne(myObj, function(err, item) {
+    db.collection("services").insertOne(myObj, function (err, item) {
       if (err) {
-        res.send({succes: 0});
-      } else if (item){
-        res.send({succes: 1});
-      }});
+        res.send({ success: 0 });
+      } else if (item) {
+        res.send({ success: 1 });
+      }
+    });
   },
 
   getAllServices: function (res) {
@@ -46,14 +47,15 @@ module.exports = {
 
   changeSubscriber: function (req, res) {
 
-    var myquery = { _id: ObjectId(req.body.serviceId)};
-    var newvalues = { $set: {subscriber: req.body.userId} };
-    db.collection("services").updateOne(myquery, newvalues, function(err, item) {
+    var myquery = { _id: ObjectId(req.body.serviceId) };
+    var newvalues = { $set: { subscriber: req.body.userId } };
+    db.collection("services").updateOne(myquery, newvalues, function (err, item) {
       if (err || !item.result.nModified) {
-        res.send({succes: 0});
-      } else if (item.result.nModified){
-        res.send({succes: 1});
-      }});
+        res.send({ success: 0 });
+      } else if (item.result.nModified) {
+        res.send({ success: 1 });
+      }
+    });
   },
 
   getUserSubscriptions: function (req, res) {
@@ -72,38 +74,43 @@ module.exports = {
 
       } else {
 
-        res.send({success: 0});
+        res.send({ success: 0 });
       }
     });
   },
 
   createUser: function (req, res) {
     var newUser = req.body;
-    var structeredUser = { firstName: newUser.firstName, lastName: newUser.lastName, userName: newUser.userName, password: newUser.password};
+    var structeredUser = { firstName: newUser.firstName, lastName: newUser.lastName, userName: newUser.userName, password: newUser.password };
 
-    db.collection("users").insertOne(structeredUser, function(err, item) {
+    db.collection("users").insertOne(structeredUser, function (err, item) {
       if (err) {
-        res.send({succes: 0});
-      } else if (item){
-        res.send({succes: 1});
-      }});
+        res.send({ success: 0 });
+      } else if (item) {
+        res.send({ success: 1 });
+      }
+    });
   },
 
   login: function (req, res) {
     var userAuth = req.body;
-    db.collection('users').findOne({ username: req.body.username}, function(err, user) {
+    var response = [];
+    db.collection('users').findOne({ username: req.body.username }, function (err, user) {
 
-      if(err) {
-        res.send({success: 0})
+      //console.log(req.body.password)
+      console.log(userAuth);
+      if (err) {
+        res.send({ success: 0 })
         console.log(err);
-      } 
-      if (user && user.password === req.body.password && user && user.userName === req.body.userName){
-        res.send({success: 1});
-        console.log(user)
+      }
+      if (user && user.password === req.body.password && user && user.userName === req.body.userName) {
+        response.push({ success: 1, user});
+        res.send(response);
+        console.log(response)
       } else {
-        res.send({success: 0});
+        res.send({ success: 0 });
         console.log('fail');
-      }              
+      }
     });
   }
 };

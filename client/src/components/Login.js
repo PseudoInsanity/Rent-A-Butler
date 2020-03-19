@@ -136,12 +136,11 @@ function LoginComponent() {
             .then(
                 user => {
                     history.push('/');
-
+                    console.log(user);
                 },
                 error => setValues({ error, loading: false })
 
             );
-        setValues({ username: '', password: '' });
     }
 
     return (

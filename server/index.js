@@ -12,22 +12,22 @@ var jsonParser = bodyParser.json();
 app.use(cors());
 
 /* MongoDB */
-const {MongoClient, ObjectId } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const assert = require('assert');
 const url = 'mongodb://localhost:27017';
 const dbName = 'rent-a-butler';
 const client = new MongoClient(url);
 let db;
 
-client.connect(function(err) {
+client.connect(function (err) {
     assert.equal(null, err);
     console.log("Connected correctly to server");
-  
+
     db = client.db(dbName);
     mongo.dbInit(db, assert, ObjectId);
 });
 
-  /* REST calls */
+/* REST calls */
 
 app.post("/service", jsonParser, (req, res) => {
 
@@ -54,22 +54,21 @@ app.post("/createUser", jsonParser, (req, res) => {
 });
 
 app.post("/login", jsonParser, (req, res) => {
-mongo.login(req, res);
-console.log(mongo);
+    mongo.login(req, res);
 });
 
 
 app.set("view engine", "ejs");
-app.use((middleware.logIncomingToConsole);
+app.use(middleware.logIncomingToConsole);
 app.listen(port, logStartUpDetailsToConsole);
-function logStartUpDetailsToConsole () {
+function logStartUpDetailsToConsole() {
     let routes = [];
 
     app._router.stack.forEach(middleware => {
         if (middleware.route) {
             routes.push(middleware.route);
 
-        } else if (middleware.name ==="router") {
+        } else if (middleware.name === "router") {
 
             middleware.handle.stack.forEach((handler) => {
 

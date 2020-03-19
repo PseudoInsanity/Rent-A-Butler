@@ -55,7 +55,7 @@ function ButlerCard({
             title="Contemplative Reptile"
           />
           <CardContent>
-            <Grid container xs={12}>
+            <Grid container item xs={12}>
               <Grid item xs={11}>
                 <Typography gutterBottom variant="h5" component="h2">
                   {item.name}

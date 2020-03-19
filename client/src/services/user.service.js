@@ -4,22 +4,24 @@ import authHeader from '../helpers/auth-header';
 export const userService = {
     login,
     logout,
-    getAll
+    getAll,
+    addServiceToDatabase
 };
 
-async function login(username, password) {
+function login(userName, password) {
 
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify({ username, password })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName, password })
     };
 
-    return await fetch(`http://localhost:1337/login`, requestOptions)
+    console.log(requestOptions.body);
+    return fetch(`http://localhost:1337/login`, requestOptions)
         .then(handleResponse)
         .then(user => {
             if (user) {
-                user.authdata = window.btoa(username + ':' + password);
+                user.authdata = window.btoa(userName + ':' + password);
                 localStorage.setItem('user', JSON.stringify(user));
             }
             return user;
@@ -40,19 +42,38 @@ function getAll() {
     return fetch(`/users`, requestOptions).then(handleResponse);
 }
 
+function addServiceToDatabase(serviceName, serviceDescription, userId) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ serviceName, serviceDescription, userId })
+
+    };
+
+    return fetch('http://localhost:1337/service', requestOptions)
+        .then(handleResponse)
+        .then(service => {
+
+            return service;
+        })
+
+}
+
 function handleResponse(response) {
     return response.text().then(text => {
+        //console.log(response);
         const data = text && JSON.parse(text);
-        if (!response.ok) {
-            if (response === 0) {
-                logout();
-                // eslint-disable-next-line no-restricted-globals
-                location.reload(true);
-            }
+        console.log(data);
+        
+        if ( data.success === 0 || data[0].success === 0) {
 
+            logout();
+            // eslint-disable-next-line no-restricted-globals
+            location.reload(true);
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
-        } else if (response === 1) {
+        } else if (data.success === 1 || data[0].success === 1) {
+            console.log(data.success);
             return data;
         }
     });
