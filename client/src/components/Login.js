@@ -131,7 +131,7 @@ function LoginComponent() {
         }
 
         setValues({ loading: true });
-        
+
         await userService.login(username, password)
             .then(
                 user => {
@@ -139,7 +139,6 @@ function LoginComponent() {
                     console.log(user);
                 },
                 error => setValues({ error, loading: false })
-
             );
     }
 

@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import {Link} from "react-router-dom";
+import { Link, useHistory } from 'react-router-dom';
+import { userService } from '../services/user.service';
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -61,8 +62,38 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Signup() {
-    const classes = useStyles();
 
+    const classes = useStyles();
+    const history = useHistory();
+    const [values, setValues] = useState({
+        firstName: '',
+        lastName: '',
+        userName: '',
+        password: ''
+    });
+
+    const handleChange = prop => event => {
+        setValues({ ...values, [prop]: event.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const { firstName, lastName, userName, password } = values;
+
+        if (!(firstName || lastName || userName || password)) {
+            return;
+        }
+
+
+        await userService.signup(firstName, lastName, userName, password)
+            .then(
+                user => {
+                    history.push('/login');
+                    console.log(user);
+                },
+                error => setValues({ error, loading: false })
+            );
+    }
     return (
         <div className={classes.container}>
             <Paper className={classes.box}>
@@ -73,6 +104,8 @@ function Signup() {
                     <Grid container spacing={2}>
                         <Grid item xs={6} >
                             <TextField className={classes.formField}
+                                value={values.firstName}
+                                onChange={handleChange('firstName')}
                                 autoComplete="fname"
                                 name="firstName"
                                 variant="filled"
@@ -85,6 +118,8 @@ function Signup() {
                         </Grid>
                         <Grid item xs={6} >
                             <TextField className={classes.formField}
+                                value={values.lastName}
+                                onChange={handleChange('lastName')}
                                 variant="filled"
                                 required
                                 fullWidth
@@ -96,17 +131,21 @@ function Signup() {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField className={classes.formField}
+                                value={values.userName}
+                                onChange={handleChange('userName')}
                                 variant="filled"
                                 required
                                 fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
+                                id="userName"
+                                label="UserName"
+                                name="UserName"
+                                autoComplete="userName"
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField className={classes.formField}
+                                value={values.password}
+                                onChange={handleChange('password')}
                                 variant="filled"
                                 required
                                 fullWidth
@@ -124,6 +163,7 @@ function Signup() {
                             <Button
                                 className={classes.button}
                                 type="submit"
+                                onClick={handleSubmit}
                                 variant="contained"
                                 color="secondary">
                                 Sign Up

@@ -1,11 +1,12 @@
-
 import authHeader from '../helpers/auth-header';
+
 
 export const userService = {
     login,
     logout,
     getAll,
-    addServiceToDatabase
+    addServiceToDatabase,
+    signup
 };
 
 function login(userName, password) {
@@ -30,7 +31,28 @@ function login(userName, password) {
 }
 
 function logout() {
+
     localStorage.removeItem('user');
+}
+
+function signup(firstName, lastName, userName, password) {
+
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName, lastName, userName, password })
+    };
+    console.log(requestOptions.body);
+    return fetch(`http://localhost:1337/createUser`, requestOptions)
+        .then(handleResponse)
+        .then(user => {
+            if (user) {
+
+            }
+            return user;
+
+        });
 }
 
 function getAll() {
@@ -64,8 +86,8 @@ function handleResponse(response) {
         //console.log(response);
         const data = text && JSON.parse(text);
         console.log(data);
-        
-        if ( data.success === 0 || data[0].success === 0) {
+
+        if (data.success === 0 || data[0].success === 0) {
 
             logout();
             // eslint-disable-next-line no-restricted-globals

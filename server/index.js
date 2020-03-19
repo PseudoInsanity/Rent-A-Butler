@@ -50,6 +50,7 @@ app.get("/service/:userId", (req, res) => {
 });
 
 app.post("/createUser", jsonParser, (req, res) => {
+    console.log('userCreated!')
     mongo.createUser(req, res);
 });
 
