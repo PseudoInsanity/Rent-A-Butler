@@ -91,17 +91,22 @@ module.exports = {
 
   login: function (req, res) {
     var userAuth = req.body;
-    console.log(userAuth);
-    db.collection('users').findOne({ username: req.body.username}, function(err, user) {
+    var credentialMatch = false;
+    var cursor = db.collection('users').find();
+    cursor.forEach(function (doc, err) {
+      assert.equal(null, err);
+      if (doc.userName === userAuth.userName && doc.password === userAuth.password) {
+        credentialMatch = true;
+      }
+    }, function () {
+      if (credentialMatch) {
 
-      if(err) {
-        res.send({success: 0})
-      } 
-      if (user && user.password === req.body.password && user && user.userName === req.body.userName){
         res.send({success: 1});
+
       } else {
+
         res.send({success: 0});
-      }              
+      }
     });
   }
 };
