@@ -4,13 +4,16 @@ import AppBar from "@material-ui/core/Appbar";
 import IconButton from "@material-ui/core/IconButton";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Menu from "@material-ui/core/Menu";
+import { userService } from '../services/user.service';
+import { useHistory } from "react-router-dom";
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -56,11 +59,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Appbar({ listOfSubscribedServices }) {
+export default function Appbar({ listOfSubscribedServices, allServices }) {
+  const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
   const classes = useStyles();
   const [auth, setAuth] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
+  const services = allServices.map(x => x.userId);
+  const history = useHistory();
 
   const handleChange = event => {
     setAuth(event.target.checked);
@@ -74,7 +80,24 @@ export default function Appbar({ listOfSubscribedServices }) {
     setAnchorEl(null);
   };
 
-  useEffect(() => { }, [listOfSubscribedServices]);
+  const handleSignOut = () => {
+    userService.logout();
+    history.push("/");
+
+  }
+
+  useEffect(() => { }, [listOfSubscribedServices, allServices]);
+
+  const ColoredLine = ({ color, width }) => (
+    <hr
+      style={{
+        color: color,
+        backgroundColor: color,
+        height: 2,
+        width: width
+      }}
+    />
+  );
 
   const renderList = (
     <Menu
@@ -89,13 +112,24 @@ export default function Appbar({ listOfSubscribedServices }) {
       <Typography className={classes.listTitle} variant="h5">
         Here are your subscriptions!
       </Typography>
-      <Divider component="li" />
+      <Divider />
       <List>
         {listOfSubscribedServices.length > 0
-          ? listOfSubscribedServices.map(item =>  <ListItem divider> <ListItemText/> <Typography className={classes.username} variant="body1">{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
+          ? listOfSubscribedServices.map(item => <ListItem divider> <ListItemText /> <Typography className={classes.username} variant="body1">{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
           : <Typography className={classes.listTitle} variant="h6">No service has been selected yet</Typography>}
       </List>
-    </Menu>
+
+      <ColoredLine width="100%" color="#94D1CA" />
+      <Typography className={classes.listTitle} variant="h5">
+        Here are your services!
+      </Typography>
+      <Divider />
+      <List>
+        {allServices.length > 0
+          ? allServices.filter(item => item.userId === userFromLocalStorage[0].user._id).map(item => <ListItem divider> <ListItemText /> <Typography className={classes.username} >{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
+          : <Typography className={classes.listTitle} variant="h6">You don't provide any services yet!</Typography>}
+      </List>
+    </Menu >
   );
 
   return (
@@ -118,8 +152,9 @@ export default function Appbar({ listOfSubscribedServices }) {
             aria-label="account button"
             aria-haspopup="true"
             color="inherit"
+            onClick={handleSignOut}
           >
-            <AccountCircle />
+            <ExitToAppIcon />
           </IconButton>
         </Toolbar>
       </AppBar>

@@ -13,7 +13,9 @@ import FilledInput from '@material-ui/core/FilledInput';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { Link, useHistory } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
+import CardMedia from "@material-ui/core/CardMedia";
 import { userService } from '../services/user.service';
+import logo from '../resources/butler_logo.png';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         '& > *': {
             margin: theme.spacing(1),
             width: theme.spacing(50),
-            height: theme.spacing(60),
+            height: theme.spacing(70),
         },
     },
     box: {
@@ -63,6 +65,13 @@ const useStyles = makeStyles((theme) => ({
             height: 50,
             content: 'center',
         },
+    },
+    media: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        padding: theme.spacing(10),
+        marginTop: theme.spacing(2),
+        height: 60
     },
     formField: {
         marginTop: 10,
@@ -120,7 +129,7 @@ function LoginComponent() {
         event.preventDefault();
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         setValues({ submitted: true });
@@ -132,7 +141,7 @@ function LoginComponent() {
 
         setValues({ loading: true });
 
-        await userService.login(username, password)
+        userService.login(username, password)
             .then(
                 user => {
                     history.push('/');
@@ -145,39 +154,45 @@ function LoginComponent() {
     return (
         <div className={classes.container}>
             <Paper className={classes.box} elevation={3}>
-                <Typography className={classes.title} variant="h3">RENT A BUTLER</Typography>
+                <CardMedia
+                    className={classes.media}
+                    image={logo}
+                    title="Rent A Butler"
+                />
                 <form className={classes.root} noValidate autoComplete="off">
                     <TextField className={classes.formField} label="Username" value={values.username} onChange={handleChange('username')} variant="filled" color="secondary" />
-                </form>
-                {/* password field */}
-                <FormControl className={clsx(classes.textField)} type="password" autoComplete="current-password" variant="filled" color="secondary">
-                    <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
-                    <FilledInput
-                        id="filled-adornment-password"
-                        type={values.showPassword ? 'text' : 'password'}
-                        value={values.password}
-                        onChange={handleChange('password')}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end" backgroundColor="#4F565F"
-                                >
-                                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                    />
-                </FormControl>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    color="secondary"
-                    onClick={handleSubmit}>
-                    LOGIN
+
+                    {/* password field */}
+                    <FormControl className={clsx(classes.textField)} type="password" autoComplete="current-password" variant="filled" color="secondary">
+                        <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
+                        <FilledInput
+                            id="filled-adornment-password"
+                            type={values.showPassword ? 'text' : 'password'}
+                            value={values.password}
+                            onChange={handleChange('password')}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end" backgroundColor="#4F565F"
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                    </FormControl>
+                    <Button
+                        variant="contained"
+                        className={classes.button}
+                        type="submit"
+                        color="secondary"
+                        onClick={handleSubmit}>
+                        LOGIN
                 </Button>
+                </form>
                 <Typography className={classes.signup} variant="h6">
                     Don't have an account?
                 </Typography>

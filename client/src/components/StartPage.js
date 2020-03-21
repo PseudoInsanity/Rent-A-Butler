@@ -8,10 +8,14 @@ import useSelectedServices from "../hooks/useSelectedServices";
 import useAddedServices from '../hooks/useAddedServices';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import Menu from "@material-ui/core/Menu";
 import TextField from '@material-ui/core/TextField';
-import IconButton from "@material-ui/core/IconButton";
 import ToolTip from '@material-ui/core/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 import { userService } from '../services/user.service';
 
 
@@ -26,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     },
     background: {
         backgroundColor: theme.palette.primary.light,
-        height: '100%'
+        height: '100vh'
     },
     grid: {
         display: 'flex',
@@ -36,7 +40,8 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        color: theme.palette.background.main
     },
     fab: {
         margin: 0,
@@ -57,16 +62,27 @@ const ColoredLine = ({ color }) => (
         }}
     />
 );
+
 function StartPage() {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const isMenuOpen = Boolean(anchorEl);
+    const [openSubscribe, setOpenSubsribe] = useState(false);
     const [subscribedService, setSubscribedService] = useState({});
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setOpenSubsribe(false);
+    };
+
 
     const [addedService, setAddedService] = useState({
         serviceName: '',
-        serviceDescription: ''
+        serviceDescription: '',
+        servicePrice: ''
     });
 
     const [
@@ -80,12 +96,12 @@ function StartPage() {
     ] = useAddedServices();
 
     const handleOpen = name => {
-        setOpen(true);
+        setOpenSubsribe(true);
         setSubscribedService(name);
     };
 
     const handleSubscribe = () => {
-        setOpen(false);
+        setOpenSubsribe(false);
 
         if (!(listOfSubscribedServices.includes(subscribedService))) {
             setListOfSubscribedServices([
@@ -95,100 +111,83 @@ function StartPage() {
         }
     };
 
-    useEffect(() => {  }, [subscribedService, allServices, listOfSubscribedServices]);
-    useEffect(() => { }, [addedService, listOfAddedServices]);
-
-    const handleClose = () => {
-        setOpen(false);
-        setSubscribedService("");
-    };
+    useEffect(() => { }, [subscribedService, allServices, listOfSubscribedServices, addedService, listOfAddedServices]);
 
     const handleChange = prop => event => {
         setAddedService({ ...addedService, [prop]: event.target.value });
     };
 
-    const handleOpenAddService = event => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
 
     const handleAddService = () => {
         const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
-        console.log(userFromLocalStorage);
-        const { serviceName, serviceDescription } = addedService;
+        const img_url = userFromLocalStorage[0].user.img_url;
+        const { serviceName, serviceDescription, servicePrice } = addedService;
 
-        if (!(serviceName && serviceDescription)) {
+        if (!(serviceName && serviceDescription && servicePrice)) {
             return;
         }
 
         setListOfAddedServices([
-            ...listOfAddedServices,
-            serviceName, serviceDescription, userFromLocalStorage[0].user._id
+            ...allServices,
+            serviceName, serviceDescription, userFromLocalStorage[0].user.userName, userFromLocalStorage[0].user._id, img_url
         ]);
 
-        console.log(listOfAddedServices);
-        userService.addServiceToDatabase(serviceName, serviceDescription, userFromLocalStorage[0].user._id);
+
+
+        userService.addServiceToDatabase(serviceName, serviceDescription, servicePrice, userFromLocalStorage[0].user.userName, userFromLocalStorage[0].user._id, img_url);
+        setOpen(false);
     }
 
-    const stopPropagationForTab = (event) => {
-        event.stopPropagation();
-    };
 
     const renderAddServiceMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            keepMounted
-            transformOrigin={{ vertical: "bottom", horizontal: "right" }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-            className={classes.menu}
-            onKeyDown={stopPropagationForTab}
-            getContentAnchorEl={null}
-        >
-            <form className={classes.root} noValidate autoComplete="off">
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Add service</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Here you can add a service that you will provide to other users! Write the name, price and a short description of what the service is.
+          </DialogContentText>
                 <TextField value={addedService.serviceName} onChange={handleChange('serviceName')} id="standard-basic" label="Name of service" />
-                <TextField value={addedService.serviceDescription} onChange={handleChange('serviceDescription')} id="filled-basic" label="Description" />
-                <IconButton
-                    edge="end"
-                    aria-label="services button"
-                    color="inherit"
-                    onClick={handleAddService}
-                >
-                    <AddIcon />
-                </IconButton>
-            </form>
-        </Menu>
+                <TextField value={addedService.servicePrice} onChange={handleChange('servicePrice')} id="standard-basic" label="Price" />
+                <TextField multiline value={addedService.serviceDescription} onChange={handleChange('serviceDescription')} id="standard-basic" label="Description" />
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                    Cancel
+          </Button>
+                <Button onClick={handleAddService} color="primary">
+                    Add Service
+          </Button>
+            </DialogActions>
+        </Dialog>
     );
 
     return (
-        <div className={classes.background}>
-            <AppBar listOfSubscribedServices={listOfSubscribedServices} />
-            <Typography className={classes.title} variant="h1">
-                List of services
+        <Grid className={classes.background}>
+            <AppBar allServices={allServices} listOfSubscribedServices={listOfSubscribedServices} />
+            <Grid container item xs={12} className={classes.grid}>
+                <Typography className={classes.title} variant="h1">
+                    List of services
             </Typography>
-            <ColoredLine color="#22333B" />
-            <ToolTip title="Add a new Service!" aria-label="add">
-                <Fab className={classes.fab} aria-label="add" onClick={handleOpenAddService}>
-                    <AddIcon />
-                </Fab>
-            </ToolTip>
-            <Grid item xs={12} className={classes.grid}>
-                <ButlerCard
-                    open={open}
-                    handleClose={handleClose}
-                    handleSubscribe={handleSubscribe}
-                    listOfSubscribedServices={listOfSubscribedServices}
-                    setListOfSubscribedServices={setListOfSubscribedServices}
-                    allServices={allServices}
-                    handleOpen={handleOpen}
-                />
+                <ColoredLine color="#22333B" />
+                <ToolTip title="Add a new Service!" aria-label="add">
+                    <Fab className={classes.fab} aria-label="add" onClick={handleClickOpen}>
+                        <AddIcon />
+                    </Fab>
+                </ToolTip>
+                <Grid item xs={10} className={classes.grid}>
+                    <ButlerCard
+                        open={openSubscribe}
+                        handleClose={handleClose}
+                        handleSubscribe={handleSubscribe}
+                        listOfSubscribedServices={listOfSubscribedServices}
+                        setListOfSubscribedServices={setListOfSubscribedServices}
+                        allServices={allServices}
+                        handleOpen={handleOpen}
+                    />
+                </Grid>
+                {renderAddServiceMenu}
             </Grid>
-            {renderAddServiceMenu}
-        </div>
+        </Grid>
     );
 }
 export default StartPage;

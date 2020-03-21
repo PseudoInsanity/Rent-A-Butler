@@ -7,8 +7,8 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import SubscriptionModal from "./SubscriptionModal";
-import serviceData from "../helpers/serviceData";
 import Grid from "@material-ui/core/Grid";
+import profile from "../resources/edmir.png"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,8 +26,13 @@ const useStyles = makeStyles((theme) => ({
   },
   username: {
     display: "flex",
-    paddingLeft: "80px",
     color: theme.palette.secondary.light
+  },
+  large: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: theme.spacing(10),
+    height: theme.spacing(10)
   }
 }));
 
@@ -45,15 +50,17 @@ function ButlerCard({
     listOfSubscribedServices.findIndex(i => i === item) !== -1
       ? "Subscribed!"
       : "Subscribe";
+  const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+
 
   return (
     <div className={classes.container}>
-      {allServices.map((item, index) => (
+      {allServices.filter(item => (!(item.userId === userFromLocalStorage[0].user._id))).map((item, index) => (
         <Card className={classes.root} key={index}>
           <CardMedia
             className={classes.media}
-            image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
-            title="Contemplative Reptile"
+            image={require(`../resources/${item.img_url}`)}
+            title="Profile picture"
           />
           <CardContent>
             <Grid container item xs={12}>
@@ -71,19 +78,22 @@ function ButlerCard({
             </Grid>
           </CardContent>
           <CardActions>
-            <Button
-              size="small"
-              color="primary"
-              onClick={() => handleOpen(item)}
-            >
-              {subscribeButtonText(item)}
-            </Button>
-            <Button size="small" color="primary">
-              Learn More
-            </Button>
+            <Grid item xs={10}>
+              <Button
+                size="small"
+                color="primary"
+                onClick={() => handleOpen(item)}
+              >
+                {subscribeButtonText(item)}
+              </Button>
+              <Button size="small" color="primary">
+                Learn More
+              </Button>
+            </Grid>
             <Typography variant="body1" className={classes.username}>
               {" "}
-              {item.userName}{" "} </Typography>
+              {item.userName}{" "} </Typography><Grid>
+            </Grid>
           </CardActions>
         </Card>
       ))}
