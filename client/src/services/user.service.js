@@ -1,12 +1,10 @@
-import authHeader from '../helpers/auth-header';
-
-
 export const userService = {
     login,
     logout,
     getAll,
     addServiceToDatabase,
-    signup
+    signup,
+    getAllUsers
 };
 
 function login(userName, password) {
@@ -85,6 +83,22 @@ function addServiceToDatabase(serviceName, serviceDescription, servicePrice, use
 
             return service;
         })
+
+}
+
+function getAllUsers() {
+
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    };
+
+    return fetch(`http://localhost:1337/users`, requestOptions)
+        .then(response => response.json())
+        .then((users) => {
+            console.log(users);
+            return users;
+        });
 
 }
 

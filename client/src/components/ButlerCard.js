@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -8,9 +8,10 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import SubscriptionModal from "./SubscriptionModal";
 import Grid from "@material-ui/core/Grid";
-import profile from "../resources/edmir.png"
+import ButlerCardExpand from './ButlerCardExpand';
+import ButlerCardFoldedActions from './ButlerCardFoldedActions';
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 345,
     maxWidth: 350,
@@ -33,7 +34,16 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
     width: theme.spacing(10),
     height: theme.spacing(10)
-  }
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
 }));
 
 function ButlerCard({
@@ -43,14 +53,20 @@ function ButlerCard({
   listOfSubscribedServices,
   setListOfSubscribedServices,
   handleOpen,
-  allServices
+  allServices,
+  rating
 }) {
+
   const classes = useStyles();
-  const subscribeButtonText = item =>
-    listOfSubscribedServices.findIndex(i => i === item) !== -1
+  const [expanded, setExpanded] = useState(false);
+  const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+
+  const subscribeButtonText = (item) => {
+    return listOfSubscribedServices.findIndex(i => i === item) !== -1
       ? "Subscribed!"
       : "Subscribe";
-  const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+  }
+
 
 
   return (
@@ -78,7 +94,7 @@ function ButlerCard({
             </Grid>
           </CardContent>
           <CardActions>
-            <Grid item xs={10}>
+            <Grid direction="row" item xs={12}>
               <Button
                 size="small"
                 color="primary"
@@ -86,9 +102,14 @@ function ButlerCard({
               >
                 {subscribeButtonText(item)}
               </Button>
-              <Button size="small" color="primary">
-                Learn More
-              </Button>
+              <ButlerCardFoldedActions
+                expanded={expanded}
+                setExpanded={setExpanded}
+              />
+              <ButlerCardExpand
+                expanded={expanded}
+                rating={rating}
+              />
             </Grid>
             <Typography variant="body1" className={classes.username}>
               {" "}

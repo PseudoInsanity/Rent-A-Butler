@@ -59,18 +59,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Appbar({ listOfSubscribedServices, allServices }) {
+function Appbar({ listOfSubscribedServices, allServices }) {
   const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
   const classes = useStyles();
-  const [auth, setAuth] = useState(true);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
-  const services = allServices.map(x => x.userId);
   const history = useHistory();
 
-  const handleChange = event => {
-    setAuth(event.target.checked);
-  };
 
   const handleList = event => {
     setAnchorEl(event.currentTarget);
@@ -162,3 +158,5 @@ export default function Appbar({ listOfSubscribedServices, allServices }) {
     </div>
   );
 }
+
+export default AppBar;

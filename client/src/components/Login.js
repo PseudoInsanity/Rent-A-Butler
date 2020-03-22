@@ -141,6 +141,7 @@ function LoginComponent() {
 
         setValues({ loading: true });
 
+        console.log(username, password);
         userService.login(username, password)
             .then(
                 user => {

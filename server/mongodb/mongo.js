@@ -42,6 +42,17 @@ module.exports = {
       }
     }, function () {
       res.send(result);
+    });
+  },
+
+  getUsers: function (res) {
+    var result = [];
+    var cursor = db.collection("users").find();
+    cursor.forEach(function (doc, err) {
+      assert.equal(null, err);
+      result.push(doc);
+    }, function () {
+      res.send(result);
       console.log(result);
     });
   },
@@ -98,8 +109,10 @@ module.exports = {
     var response = [];
     db.collection('users').findOne({ username: req.body.username }, function (err, user) {
 
-      //console.log(req.body.password)
-      console.log(userAuth);
+      console.log(`This is userAuth: ${req.body.username}`)
+      console.log(`This is username in db:${user.userName}  This is password in db:${user.password}`);
+      console.log(`This is req username:${req.body.userName} This is req password:${req.body.password}`);
+
       if (err) {
         res.send({ success: 0 })
         console.log(err);

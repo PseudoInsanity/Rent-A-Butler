@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import useSelectedServices from "../hooks/useSelectedServices";
 import useAddedServices from '../hooks/useAddedServices';
+import useAllUsers from '../hooks/useAllUsers';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
@@ -30,7 +31,6 @@ const useStyles = makeStyles(theme => ({
     },
     background: {
         backgroundColor: theme.palette.primary.light,
-        height: '100vh'
     },
     grid: {
         display: 'flex',
@@ -68,6 +68,7 @@ function StartPage() {
     const [open, setOpen] = useState(false);
     const [openSubscribe, setOpenSubsribe] = useState(false);
     const [subscribedService, setSubscribedService] = useState({});
+    const [rating, setRating] = useState(0);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -78,12 +79,12 @@ function StartPage() {
         setOpenSubsribe(false);
     };
 
-
     const [addedService, setAddedService] = useState({
         serviceName: '',
         serviceDescription: '',
         servicePrice: ''
     });
+
 
     const [
         { listOfSubscribedServices, allServices },
@@ -94,6 +95,8 @@ function StartPage() {
         { listOfAddedServices },
         { setListOfAddedServices }
     ] = useAddedServices();
+
+    const [ {users} ] = useAllUsers();
 
     const handleOpen = name => {
         setOpenSubsribe(true);
@@ -111,7 +114,11 @@ function StartPage() {
         }
     };
 
-    useEffect(() => { }, [subscribedService, allServices, listOfSubscribedServices, addedService, listOfAddedServices]);
+    useEffect(() => { 
+        
+        setRating(users.map(item => item.ratings));
+    
+    }, [users, subscribedService, allServices, listOfSubscribedServices, addedService, listOfAddedServices]);
 
     const handleChange = prop => event => {
         setAddedService({ ...addedService, [prop]: event.target.value });
@@ -162,7 +169,7 @@ function StartPage() {
     );
 
     return (
-        <Grid className={classes.background}>
+        <div className={classes.background}>
             <AppBar allServices={allServices} listOfSubscribedServices={listOfSubscribedServices} />
             <Grid container item xs={12} className={classes.grid}>
                 <Typography className={classes.title} variant="h1">
@@ -183,11 +190,12 @@ function StartPage() {
                         setListOfSubscribedServices={setListOfSubscribedServices}
                         allServices={allServices}
                         handleOpen={handleOpen}
+                        rating={rating}
                     />
                 </Grid>
                 {renderAddServiceMenu}
             </Grid>
-        </Grid>
+        </div>
     );
 }
 export default StartPage;
