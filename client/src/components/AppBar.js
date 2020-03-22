@@ -60,7 +60,8 @@ const useStyles = makeStyles(theme => ({
 function Appbar({
   listOfSubscribedServices,
   allServices,
-  listOfAddedServices
+  listOfAddedServices,
+  selectedSubscription
 }) {
 
   const classes = useStyles();
@@ -77,15 +78,17 @@ function Appbar({
     setAnchorEl(null);
   };
 
+
   const handleSignOut = () => {
     userService.logout();
     history.push("/");
   };
 
-  useEffect(() => {}, [
+  useEffect(() => {console.log('selectedSubscribedServices',selectedSubscription)}, [
     listOfSubscribedServices,
     allServices,
-    listOfAddedServices
+    listOfAddedServices,
+    selectedSubscription
   ]);
 
   const ColoredLine = ({ color, width }) => (
@@ -114,8 +117,8 @@ function Appbar({
       </Typography>
       <Divider />
       <List>
-        {listOfSubscribedServices.length > 0 ? (
-          listOfSubscribedServices.map(item => (
+        {selectedSubscription.length > 0 ? (
+          selectedSubscription.map(item => (
             <ListItem divider>
               {" "}
               <ListItemText />{" "}
@@ -138,7 +141,7 @@ function Appbar({
       <Divider />
       <List>
         {listOfAddedServices.length > 0 ? (
-          listOfAddedServices.filter(item => item.userId === userFromLocalStorage[0]._id).map((item, index) => (
+          listOfAddedServices.map((item, index) => (
             <ListItem divider key={index}>
               {" "}
               <ListItemText />{" "}

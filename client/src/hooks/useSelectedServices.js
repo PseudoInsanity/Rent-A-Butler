@@ -20,7 +20,7 @@ function useSelectedServices() {
   }
   useEffect(() => {
     getAllServices();
-
+    getAllSubscriptions();
   }, []);
 
   return [

@@ -17,6 +17,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { userService } from '../services/user.service';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+
+
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -49,6 +53,14 @@ const useStyles = makeStyles(theme => ({
         bottom: 20,
         left: 'auto',
         position: 'fixed',
+    },
+    aboutFab: {
+        margin: 0,
+        top: 'auto',
+        right: 'auto',
+        bottom: 20,
+        left: 20,
+        position: 'fixed',
     }
 }));
 const ColoredLine = ({ color }) => (
@@ -65,18 +77,24 @@ const ColoredLine = ({ color }) => (
 function StartPage() {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+    const [openAbout, setOpenAbout] = useState(false);
     const [openSubscribe, setOpenSubsribe] = useState(false);
     const [subscribedService, setSubscribedService] = useState({});
     const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
 
 
-    const handleClickOpen = () => {
+    const handleAddOpen = () => {
         setOpen(true);
     };
+
+    const handleAboutOpen = () => {
+        setOpenAbout(true);
+    }
 
     const handleClose = () => {
         setOpen(false);
         setOpenSubsribe(false);
+        setOpenAbout(false);
     };
 
     const [addedService, setAddedService] = useState({
@@ -84,6 +102,7 @@ function StartPage() {
         serviceDescription: '',
         servicePrice: ''
     });
+    const [selectedSubscription, setSelectedSubscription] = useState([])
 
 
     const [
@@ -113,7 +132,6 @@ function StartPage() {
         }
     };
 
-    useEffect(() => { }, [subscribedService, allServices, listOfSubscribedServices, addedService]);
 
     const handleChange = prop => event => {
         setAddedService({ ...addedService, [prop]: event.target.value });
@@ -136,19 +154,45 @@ function StartPage() {
             )
         }
 
+        const userName = userFromLocalStorage[0].userName;
+        const _id = userFromLocalStorage[0]._id
+
+
         setListOfAddedServices([
             ...listOfAddedServices,
-            serviceName, serviceDescription, userFromLocalStorage[0].userName, userFromLocalStorage[0]._id, img_url
+            {
+                serviceName, serviceDescription, userName, _id, img_url
+            }
         ]);
 
+
         userService.addServiceToDatabase(serviceName, serviceDescription, servicePrice, userFromLocalStorage[0].userName, userFromLocalStorage[0]._id, img_url);
-
-
+        setAddedService('');
         setOpen(false);
     }
 
+    useEffect(() => {
+        const selectedSubscribedServices = allServices.filter(item => listOfSubscribedServices.includes(item._id))
+        setSelectedSubscription(selectedSubscribedServices)
+    }, [subscribedService, allServices, listOfSubscribedServices, addedService, listOfAddedServices]);
+
+
     const renderWarningText = (
         <Typography>Must be a number!</Typography>
+    )
+
+    const renderAboutDialog = (
+        <Dialog open={openAbout} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <DialogTitle>About us</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    <strong>Edmir Suljic:</strong> frontend. Worked on the cards and services.<br />
+                    <strong>Samin Dehghani:</strong> frontend. Worked on the login and signup functionality and pages.<br />
+                    <strong>Matteo Madrusan:</strong> backend. Worked on api and setting up the server and adding/getting services functions.<br />
+                    <strong>Filip Bengtsson:</strong> backend. Worked on database and login/create user functions.
+                </DialogContentText>
+            </DialogContent>
+        </Dialog>
     )
 
     const renderAddServiceMenu = (
@@ -176,14 +220,19 @@ function StartPage() {
 
     return (
         <div className={classes.background}>
-            <Appbar allServices={allServices} listOfSubscribedServices={listOfSubscribedServices} listOfAddedServices={listOfAddedServices} />
+            <Appbar allServices={allServices} listOfSubscribedServices={listOfSubscribedServices} listOfAddedServices={listOfAddedServices} selectedSubscription={selectedSubscription} />
             <Grid container item xs={12} className={classes.grid}>
                 <Typography className={classes.title} variant="h1">
                     List of services
             </Typography>
                 <ColoredLine color="#22333B" />
+                <ToolTip title="About us!" aria-label="add">
+                    <Fab className={classes.aboutFab} aria-label="add" onClick={handleAboutOpen}>
+                        <HelpOutlineIcon fontSize="large" />
+                    </Fab>
+                </ToolTip>
                 <ToolTip title="Add a new Service!" aria-label="add">
-                    <Fab className={classes.fab} aria-label="add" onClick={handleClickOpen}>
+                    <Fab className={classes.fab} aria-label="add" onClick={handleAddOpen}>
                         <AddIcon />
                     </Fab>
                 </ToolTip>
@@ -200,6 +249,7 @@ function StartPage() {
                     />
                 </Grid>
                 {renderAddServiceMenu}
+                {renderAboutDialog}
             </Grid>
         </div>
     );

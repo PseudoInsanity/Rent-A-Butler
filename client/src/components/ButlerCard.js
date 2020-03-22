@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -62,16 +62,16 @@ function ButlerCard({
   const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
 
   const subscribeButtonText = (item) => {
-    return listOfSubscribedServices.findIndex(i => i === item) !== -1
+    return listOfSubscribedServices.findIndex(i => i === item._id) !== -1
       ? "Subscribed!"
       : "Subscribe";
   }
 
-
+useEffect(() => {}, [listOfSubscribedServices._id])
 
   return (
     <div className={classes.container}>
-      {allServices.filter(item => (!(item.userId === userFromLocalStorage[0]._id) && item.img_url !== undefined)).map((item, index) => (
+      {allServices.filter(item => ((item.userId !== userFromLocalStorage[0]._id) && item.img_url !== undefined)).map((item, index) => (
         <Card className={classes.root} key={index}>
           <CardMedia
             className={classes.media}

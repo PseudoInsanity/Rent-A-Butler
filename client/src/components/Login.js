@@ -102,6 +102,9 @@ const useStyles = makeStyles((theme) => ({
             color: theme.palette.secondary.main,
         },
     },
+    narrative: {
+        color: theme.palette.secondary.light       
+    }
 }));
 
 function Login() {
@@ -139,7 +142,7 @@ function Login() {
             return;
         }
 
-        
+
 
         userService.login(username, password)
             .then(
@@ -153,56 +156,61 @@ function Login() {
 
     return (
         <div className={classes.container}>
-            <Paper className={classes.box} elevation={3}>
-                <CardMedia
-                    className={classes.media}
-                    image={logo}
-                    title="Rent A Butler"
-                />
-                <form className={classes.root} noValidate autoComplete="off">
-                    <TextField className={classes.formField} label="Username" value={values.username} onChange={handleChange('username')} variant="filled" color="secondary" />
+            <Grid>
+                <Paper className={classes.box} elevation={3}>
+                    <CardMedia
+                        className={classes.media}
+                        image={logo}
+                        title="Rent A Butler"
+                    />
+                    <form className={classes.root} noValidate autoComplete="off">
+                        <TextField className={classes.formField} label="Username" value={values.username} onChange={handleChange('username')} variant="filled" color="secondary" />
 
-                    {/* password field */}
-                    <FormControl className={clsx(classes.textField)} type="password" autoComplete="current-password" variant="filled" color="secondary">
-                        <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
-                        <FilledInput
-                            id="filled-adornment-password"
-                            type={values.showPassword ? 'text' : 'password'}
-                            value={values.password}
-                            onChange={handleChange('password')}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end" backgroundcolor="#4F565F"
-                                    >
-                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                        />
-                    </FormControl>
-                    <Button
-                        variant="contained"
-                        className={classes.button}
-                        type="submit"
-                        color="secondary"
-                        onClick={handleSubmit}>
-                        LOGIN
+                        {/* password field */}
+                        <FormControl className={clsx(classes.textField)} type="password" autoComplete="current-password" variant="filled" color="secondary">
+                            <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
+                            <FilledInput
+                                id="filled-adornment-password"
+                                type={values.showPassword ? 'text' : 'password'}
+                                value={values.password}
+                                onChange={handleChange('password')}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end" backgroundcolor="#4F565F"
+                                        >
+                                            {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                            />
+                        </FormControl>
+                        <Button
+                            variant="contained"
+                            className={classes.button}
+                            type="submit"
+                            color="secondary"
+                            onClick={handleSubmit}>
+                            LOGIN
                 </Button>
-                </form>
-                <Typography className={classes.signup} variant="h6">
-                    Don't have an account?
+                    </form>
+                    <Typography className={classes.signup} variant="h6">
+                        Don't have an account?
                 </Typography>
-                <Grid container justify="center">
-                    <Link to="./signup" variant="body2">
-                        Signup here!
+                    <Grid container justify="center">
+                        <Link to="./signup" variant="body2">
+                            Signup here!
                 </Link>
-                {successfullLogin ? <Typography className={classes.textField}>Incorrect username or password!</Typography> : ''}
+                        {successfullLogin ? <Typography className={classes.textField}>Incorrect username or password!</Typography> : ''}
+                    </Grid>
+                </Paper>
+                <Grid className={classes.container}>
+                    <Typography className={classes.narrative} variant="h5">Hello and welcome to Rent A Butler! The purpose of this app is to be able to create services that you would like to offer and subscribe to services you would like to make your life easier!</Typography>
                 </Grid>
-            </Paper>
+            </Grid>
         </div>
     );
 }

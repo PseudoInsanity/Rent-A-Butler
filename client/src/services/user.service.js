@@ -70,7 +70,7 @@ function getAll() {
 
 function subscribeToService(serviceId, userId) {
     const requestOptions = {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ serviceId, userId })
     };
@@ -85,11 +85,11 @@ function getUserSubscriptions(userId) {
         headers: { 'Content-Type': 'application/json' }
     };
 
+
     return fetch(`http://localhost:1337/service/${userId}`, requestOptions)
-        .then(handleResponse)
-        .then((subscriptions) => {
-            return subscriptions;
-        })
+        .then(response=> {  return response.text().then(text => {
+             return JSON.parse(text)})})
+        
 }
 
 function addServiceToDatabase(serviceName, serviceDescription, servicePrice, userName, userId, img_url) {
@@ -106,7 +106,6 @@ function addServiceToDatabase(serviceName, serviceDescription, servicePrice, use
 
             return service;
         })
-
 }
 
 function handleResponse(response) {
