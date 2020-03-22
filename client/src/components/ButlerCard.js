@@ -73,7 +73,6 @@ function ButlerCard({
     <div className={classes.container}>
       {allServices.filter(item => (!(item.userId === userFromLocalStorage[0]._id) && item.img_url !== undefined)).map((item, index) => (
         <Card className={classes.root} key={index}>
-          {console.log(item.img_url)}
           <CardMedia
             className={classes.media}
             image={require(`../resources/${item.img_url}`)}

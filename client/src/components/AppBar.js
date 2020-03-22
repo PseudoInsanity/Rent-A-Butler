@@ -4,17 +4,15 @@ import AppBar from "@material-ui/core/Appbar";
 import IconButton from "@material-ui/core/IconButton";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Divider from "@material-ui/core/Divider";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
-import { userService } from '../services/user.service';
+import { userService } from "../services/user.service";
 import { useHistory } from "react-router-dom";
-
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,14 +57,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Appbar({ listOfSubscribedServices, allServices }) {
-  const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
-  const classes = useStyles();
-  const history = useHistory();
+function Appbar({
+  listOfSubscribedServices,
+  allServices,
+  listOfAddedServices
+}) {
 
+  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
-
+  const history = useHistory();
+  const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
 
   const handleList = event => {
     setAnchorEl(event.currentTarget);
@@ -77,11 +78,15 @@ function Appbar({ listOfSubscribedServices, allServices }) {
   };
 
   const handleSignOut = () => {
-     userService.logout();
-     history.push('/');
-  }
+    userService.logout();
+    history.push("/");
+  };
 
-  useEffect(() => { }, [listOfSubscribedServices, allServices]);
+  useEffect(() => {}, [
+    listOfSubscribedServices,
+    allServices,
+    listOfAddedServices
+  ]);
 
   const ColoredLine = ({ color, width }) => (
     <hr
@@ -109,22 +114,46 @@ function Appbar({ listOfSubscribedServices, allServices }) {
       </Typography>
       <Divider />
       <List>
-        {listOfSubscribedServices.length > 0
-          ? listOfSubscribedServices.map((item, index) => <ListItem key={index} divider> <ListItemText /> <Typography className={classes.username} variant="body1">{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
-          : <Typography className={classes.listTitle} variant="h6">No service has been selected yet</Typography>}
+        {listOfSubscribedServices.length > 0 ? (
+          listOfSubscribedServices.map(item => (
+            <ListItem divider>
+              {" "}
+              <ListItemText />{" "}
+              <Typography
+                className={classes.username}
+                variant="body1"
+              >{`${item.serviceName} by ${item.userName}`}</Typography>{" "}
+            </ListItem>
+          ))
+        ) : (
+          <Typography className={classes.listTitle} variant="h6">
+            No service has been selected yet
+          </Typography>
+        )}
       </List>
-
       <ColoredLine width="100%" color="#94D1CA" />
       <Typography className={classes.listTitle} variant="h5">
         Here are your services!
       </Typography>
       <Divider />
       <List>
-        {allServices.length > 0
-          ? allServices.filter(item => item.userId === userFromLocalStorage[0]._id).map((item, index) => <ListItem key={index} divider> <ListItemText /> <Typography className={classes.username} >{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
-          : <Typography className={classes.listTitle} variant="h6">You don't provide any services yet!</Typography>}
+        {listOfAddedServices.length > 0 ? (
+          listOfAddedServices.filter(item => item.userId === userFromLocalStorage[0]._id).map((item, index) => (
+            <ListItem divider key={index}>
+              {" "}
+              <ListItemText />{" "}
+              <Typography
+                className={classes.username}
+              >{`${item.serviceName} by ${item.userName}`}</Typography>{" "}
+            </ListItem>
+          ))
+        ) : (
+          <Typography className={classes.listTitle} variant="h6">
+            You don't provide any services yet!
+          </Typography>
+        )}
       </List>
-    </Menu >
+    </Menu>
   );
 
   return (
@@ -157,5 +186,4 @@ function Appbar({ listOfSubscribedServices, allServices }) {
     </div>
   );
 }
-
 export default Appbar;

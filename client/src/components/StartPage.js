@@ -67,7 +67,8 @@ function StartPage() {
     const [open, setOpen] = useState(false);
     const [openSubscribe, setOpenSubsribe] = useState(false);
     const [subscribedService, setSubscribedService] = useState({});
-    
+    const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -108,12 +109,11 @@ function StartPage() {
                 ...listOfSubscribedServices,
                 subscribedService
             ]);
-
-            userService.subscribeToService(subscribedService);
+            userService.subscribeToService(subscribedService._id, userFromLocalStorage[0]._id);
         }
     };
 
-    useEffect(() => {}, [subscribedService, allServices, listOfSubscribedServices, addedService]);
+    useEffect(() => { }, [subscribedService, allServices, listOfSubscribedServices, addedService]);
 
     const handleChange = prop => event => {
         setAddedService({ ...addedService, [prop]: event.target.value });
@@ -121,12 +121,19 @@ function StartPage() {
 
 
     const handleAddService = () => {
-        const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
         const img_url = userFromLocalStorage[0].img_url;
         const { serviceName, serviceDescription, servicePrice } = addedService;
+        const isNumber = (servicePrice) => Number.isFinite(servicePrice);
 
         if (!(serviceName && serviceDescription && servicePrice)) {
-            return;
+            return renderWarningText;
+        }
+
+        console.log(isNumber);
+        if (!isNumber) {
+            return (
+                <Typography>Must be a number!</Typography>
+            )
         }
 
         setListOfAddedServices([
@@ -135,9 +142,14 @@ function StartPage() {
         ]);
 
         userService.addServiceToDatabase(serviceName, serviceDescription, servicePrice, userFromLocalStorage[0].userName, userFromLocalStorage[0]._id, img_url);
+
+
         setOpen(false);
     }
 
+    const renderWarningText = (
+        <Typography>Must be a number!</Typography>
+    )
 
     const renderAddServiceMenu = (
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -146,9 +158,10 @@ function StartPage() {
                 <DialogContentText>
                     Here you can add a service that you will provide to other users! Write the name, price and a short description of what the service is.
           </DialogContentText>
-                <TextField value={addedService.serviceName} onChange={handleChange('serviceName')} id="standard-basic" label="Name of service" />
-                <TextField value={addedService.servicePrice} onChange={handleChange('servicePrice')} id="standard-basic" label="Price" />
-                <TextField multiline value={addedService.serviceDescription} onChange={handleChange('serviceDescription')} id="standard-basic" label="Description" />
+
+                <TextField required value={addedService.serviceName} onChange={handleChange('serviceName')} id="standard-basic" label="Name of service" />
+                <TextField required value={addedService.servicePrice} onChange={handleChange('servicePrice')} id="standard-basic" label="Price" />
+                <TextField required multiline value={addedService.serviceDescription} onChange={handleChange('serviceDescription')} id="standard-basic" label="Description" />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
@@ -163,7 +176,7 @@ function StartPage() {
 
     return (
         <div className={classes.background}>
-            <Appbar allServices={allServices} listOfSubscribedServices={listOfSubscribedServices} />
+            <Appbar allServices={allServices} listOfSubscribedServices={listOfSubscribedServices} listOfAddedServices={listOfAddedServices} />
             <Grid container item xs={12} className={classes.grid}>
                 <Typography className={classes.title} variant="h1">
                     List of services

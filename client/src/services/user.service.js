@@ -4,7 +4,8 @@ export const userService = {
     getAll,
     addServiceToDatabase,
     signup,
-    subscribeToService
+    subscribeToService,
+    getUserSubscriptions
 };
 
 function login(userName, password) {
@@ -65,19 +66,30 @@ function getAll() {
         .then((service) => {
             return service;
         });
-
-
 }
 
-function subscribeToService(serviceName, userId) {
+function subscribeToService(serviceId, userId) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ serviceName, userId })
+        body: JSON.stringify({ serviceId, userId })
     };
 
     return fetch(`http://localhost:1337/service`, requestOptions)
         .then(handleResponse)
+}
+
+function getUserSubscriptions(userId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    };
+
+    return fetch(`http://localhost:1337/service/${userId}`, requestOptions)
+        .then(handleResponse)
+        .then((subscriptions) => {
+            return subscriptions;
+        })
 }
 
 function addServiceToDatabase(serviceName, serviceDescription, servicePrice, userName, userId, img_url) {

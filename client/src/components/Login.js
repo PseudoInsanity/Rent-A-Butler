@@ -111,11 +111,12 @@ function Login() {
         username: '',
         password: '',
         submitted: false,
-        loading: false,
+        loggedIn: false,
         error: '',
         showPassword: false,
     });
-    let user;
+    let successfullLogin;
+
     const handleChange = prop => event => {
         setValues({ ...values, [prop]: event.target.value });
     };
@@ -138,12 +139,13 @@ function Login() {
             return;
         }
 
-        setValues({ loading: true });
+        
 
         userService.login(username, password)
             .then(
-                user = createdUser => {
+                user => {
                     history.push('/');
+                    setValues({ successfullLogin: true });
                 },
                 error => setValues({ error, loading: false })
             );
@@ -198,7 +200,7 @@ function Login() {
                     <Link to="./signup" variant="body2">
                         Signup here!
                 </Link>
-                {user ? <Typography className={classes.textField}>Incorrect username or password!</Typography> : ''}
+                {successfullLogin ? <Typography className={classes.textField}>Incorrect username or password!</Typography> : ''}
                 </Grid>
             </Paper>
         </div>
