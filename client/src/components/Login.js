@@ -104,10 +104,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function LoginComponent() {
+function Login() {
     const classes = useStyles();
     const history = useHistory();
-    const [username, setUsername] = useState('');
     const [values, setValues] = useState({
         username: '',
         password: '',
@@ -141,12 +140,10 @@ function LoginComponent() {
 
         setValues({ loading: true });
 
-        console.log(username, password);
         userService.login(username, password)
             .then(
                 user => {
                     history.push('/');
-                    console.log(user);
                 },
                 error => setValues({ error, loading: false })
             );
@@ -177,7 +174,7 @@ function LoginComponent() {
                                         aria-label="toggle password visibility"
                                         onClick={handleClickShowPassword}
                                         onMouseDown={handleMouseDownPassword}
-                                        edge="end" backgroundColor="#4F565F"
+                                        edge="end" backgroundcolor="#4F565F"
                                     >
                                         {values.showPassword ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
@@ -206,4 +203,4 @@ function LoginComponent() {
         </div>
     );
 }
-export default LoginComponent;
+export default Login;

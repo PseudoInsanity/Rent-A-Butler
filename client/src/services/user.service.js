@@ -3,8 +3,7 @@ export const userService = {
     logout,
     getAll,
     addServiceToDatabase,
-    signup,
-    getAllUsers
+    signup
 };
 
 function login(userName, password) {
@@ -41,7 +40,7 @@ function signup(firstName, lastName, userName, password) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ firstName, lastName, userName, password })
     };
-    console.log(requestOptions.body);
+
     return fetch(`http://localhost:1337/createUser`, requestOptions)
         .then(handleResponse)
         .then(user => {
@@ -86,28 +85,9 @@ function addServiceToDatabase(serviceName, serviceDescription, servicePrice, use
 
 }
 
-function getAllUsers() {
-
-    const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-    };
-
-    return fetch(`http://localhost:1337/users`, requestOptions)
-        .then(response => response.json())
-        .then((users) => {
-            console.log(users);
-            return users;
-        });
-
-}
-
 function handleResponse(response) {
     return response.text().then(text => {
-        console.log(response);
-        //console.log(text);
         const data = text && JSON.parse(text);
-        console.log(data);
 
         if (data[0] === undefined) {
             if (data.success === 0) {
@@ -118,7 +98,6 @@ function handleResponse(response) {
                 const error = (data && data.message) || response.statusText;
                 return Promise.reject(error);
             } else if (data.success === 1) {
-                console.log(data.success);
                 return data;
             }
         } else {
@@ -130,7 +109,6 @@ function handleResponse(response) {
                 const error = (data && data.message) || response.statusText;
                 return Promise.reject(error);
             } else if (data[0].success === 1) {
-                console.log(data.success);
                 return data;
             }
         }

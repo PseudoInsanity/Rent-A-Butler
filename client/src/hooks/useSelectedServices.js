@@ -6,7 +6,6 @@ function useSelectedServices() {
   const [allServices, setAllServices] = useState([]);
   const getAllServices = async () => {
     const result = await userService.getAll();
-
     setAllServices(result);
   };
   useEffect(() => {
@@ -21,7 +20,8 @@ function useSelectedServices() {
       allServices
     },
     {
-      setListOfSubscribedServices
+      setListOfSubscribedServices,
+      setAllServices
     }
   ];
 }

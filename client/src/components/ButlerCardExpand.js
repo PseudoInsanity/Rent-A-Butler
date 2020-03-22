@@ -7,12 +7,11 @@ import Typography from '@material-ui/core/Typography';
 
 const ButlerCardExpand = ( { expanded, rating }) => {
 
-
     return (
         <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-            <Typography>Overall:</Typography>
-            <Rating name="read-only" mb={3} readOnly rating={rating}></Rating>
+            <Typography>Rating:</Typography>
+            <Rating name="read-only" mb={3} readOnly value={rating}></Rating>
         </CardContent>
         </Collapse>
     )

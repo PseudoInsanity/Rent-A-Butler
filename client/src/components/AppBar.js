@@ -62,10 +62,10 @@ const useStyles = makeStyles(theme => ({
 function Appbar({ listOfSubscribedServices, allServices }) {
   const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
   const classes = useStyles();
+  const history = useHistory();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
-  const history = useHistory();
 
 
   const handleList = event => {
@@ -77,9 +77,8 @@ function Appbar({ listOfSubscribedServices, allServices }) {
   };
 
   const handleSignOut = () => {
-    userService.logout();
-    history.push("/");
-
+     userService.logout();
+     history.push('/');
   }
 
   useEffect(() => { }, [listOfSubscribedServices, allServices]);
@@ -111,7 +110,7 @@ function Appbar({ listOfSubscribedServices, allServices }) {
       <Divider />
       <List>
         {listOfSubscribedServices.length > 0
-          ? listOfSubscribedServices.map(item => <ListItem divider> <ListItemText /> <Typography className={classes.username} variant="body1">{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
+          ? listOfSubscribedServices.map((item, index) => <ListItem key={index} divider> <ListItemText /> <Typography className={classes.username} variant="body1">{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
           : <Typography className={classes.listTitle} variant="h6">No service has been selected yet</Typography>}
       </List>
 
@@ -122,7 +121,7 @@ function Appbar({ listOfSubscribedServices, allServices }) {
       <Divider />
       <List>
         {allServices.length > 0
-          ? allServices.filter(item => item.userId === userFromLocalStorage[0].user._id).map(item => <ListItem divider> <ListItemText /> <Typography className={classes.username} >{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
+          ? allServices.filter(item => item.userId === userFromLocalStorage[0].user._id).map((item, index) => <ListItem key={index} divider> <ListItemText /> <Typography className={classes.username} >{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
           : <Typography className={classes.listTitle} variant="h6">You don't provide any services yet!</Typography>}
       </List>
     </Menu >
@@ -159,4 +158,4 @@ function Appbar({ listOfSubscribedServices, allServices }) {
   );
 }
 
-export default AppBar;
+export default Appbar;

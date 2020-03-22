@@ -94,7 +94,7 @@ function ButlerCard({
             </Grid>
           </CardContent>
           <CardActions>
-            <Grid direction="row" item xs={12}>
+            <Grid direction="row" container item xs={12}>
               <Button
                 size="small"
                 color="primary"
@@ -108,7 +108,7 @@ function ButlerCard({
               />
               <ButlerCardExpand
                 expanded={expanded}
-                rating={rating}
+                rating={item.rating}
               />
             </Grid>
             <Typography variant="body1" className={classes.username}>

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import AppBar from "./AppBar";
+import Appbar from "./Appbar";
 import ButlerCard from "./ButlerCard";
 import { makeStyles } from "@material-ui/core/";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import useSelectedServices from "../hooks/useSelectedServices";
 import useAddedServices from '../hooks/useAddedServices';
-import useAllUsers from '../hooks/useAllUsers';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
@@ -68,7 +67,7 @@ function StartPage() {
     const [open, setOpen] = useState(false);
     const [openSubscribe, setOpenSubsribe] = useState(false);
     const [subscribedService, setSubscribedService] = useState({});
-    const [rating, setRating] = useState(0);
+    
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -96,8 +95,6 @@ function StartPage() {
         { setListOfAddedServices }
     ] = useAddedServices();
 
-    const [ {users} ] = useAllUsers();
-
     const handleOpen = name => {
         setOpenSubsribe(true);
         setSubscribedService(name);
@@ -114,11 +111,7 @@ function StartPage() {
         }
     };
 
-    useEffect(() => { 
-        
-        setRating(users.map(item => item.ratings));
-    
-    }, [users, subscribedService, allServices, listOfSubscribedServices, addedService, listOfAddedServices]);
+    useEffect(() => {}, [subscribedService, allServices, listOfSubscribedServices, addedService]);
 
     const handleChange = prop => event => {
         setAddedService({ ...addedService, [prop]: event.target.value });
@@ -135,7 +128,7 @@ function StartPage() {
         }
 
         setListOfAddedServices([
-            ...allServices,
+            ...listOfAddedServices,
             serviceName, serviceDescription, userFromLocalStorage[0].user.userName, userFromLocalStorage[0].user._id, img_url
         ]);
 
@@ -170,7 +163,7 @@ function StartPage() {
 
     return (
         <div className={classes.background}>
-            <AppBar allServices={allServices} listOfSubscribedServices={listOfSubscribedServices} />
+            <Appbar allServices={allServices} listOfSubscribedServices={listOfSubscribedServices} />
             <Grid container item xs={12} className={classes.grid}>
                 <Typography className={classes.title} variant="h1">
                     List of services
@@ -190,7 +183,7 @@ function StartPage() {
                         setListOfSubscribedServices={setListOfSubscribedServices}
                         allServices={allServices}
                         handleOpen={handleOpen}
-                        rating={rating}
+                        rating={allServices}
                     />
                 </Grid>
                 {renderAddServiceMenu}
