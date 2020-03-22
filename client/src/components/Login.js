@@ -115,7 +115,7 @@ function Login() {
         error: '',
         showPassword: false,
     });
-
+    let user;
     const handleChange = prop => event => {
         setValues({ ...values, [prop]: event.target.value });
     };
@@ -142,7 +142,7 @@ function Login() {
 
         userService.login(username, password)
             .then(
-                user => {
+                user = createdUser => {
                     history.push('/');
                 },
                 error => setValues({ error, loading: false })
@@ -198,6 +198,7 @@ function Login() {
                     <Link to="./signup" variant="body2">
                         Signup here!
                 </Link>
+                {user ? <Typography className={classes.textField}>Incorrect username or password!</Typography> : ''}
                 </Grid>
             </Paper>
         </div>

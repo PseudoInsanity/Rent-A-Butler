@@ -10,7 +10,7 @@ const ButlerCardFoldedActions = ({ expanded, setExpanded }) => {
     const classes = useStyles();
 
     const handleExpandClick = () => {
-        setExpanded(!expanded);
+        setExpanded(!expanded)
     }
 
     return (

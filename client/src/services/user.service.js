@@ -3,7 +3,8 @@ export const userService = {
     logout,
     getAll,
     addServiceToDatabase,
-    signup
+    signup,
+    subscribeToService
 };
 
 function login(userName, password) {
@@ -14,7 +15,6 @@ function login(userName, password) {
         body: JSON.stringify({ userName, password })
     };
 
-    console.log(requestOptions.body);
     return fetch(`http://localhost:1337/login`, requestOptions)
         .then(handleResponse)
         .then(user => {
@@ -66,13 +66,25 @@ function getAll() {
             return service;
         });
 
+
+}
+
+function subscribeToService(serviceName, userId) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ serviceName, userId })
+    };
+
+    return fetch(`http://localhost:1337/service`, requestOptions)
+        .then(handleResponse)
 }
 
 function addServiceToDatabase(serviceName, serviceDescription, servicePrice, userName, userId, img_url) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ serviceName, serviceDescription, servicePrice, userName, userId, img_url})
+        body: JSON.stringify({ serviceName, serviceDescription, servicePrice, userName, userId, img_url })
 
     };
 
@@ -89,7 +101,7 @@ function handleResponse(response) {
     return response.text().then(text => {
         const data = text && JSON.parse(text);
 
-        if (data[0] === undefined) {
+        if (data[1] === undefined) {
             if (data.success === 0) {
 
                 logout();
@@ -101,14 +113,14 @@ function handleResponse(response) {
                 return data;
             }
         } else {
-            if (data[0].success === 0) {
+            if (data[1].success === 0) {
 
                 logout();
                 // eslint-disable-next-line no-restricted-globals
                 location.reload(true);
                 const error = (data && data.message) || response.statusText;
                 return Promise.reject(error);
-            } else if (data[0].success === 1) {
+            } else if (data[1].success === 1) {
                 return data;
             }
         }

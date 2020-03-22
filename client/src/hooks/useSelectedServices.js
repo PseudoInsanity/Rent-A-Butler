@@ -13,7 +13,6 @@ function useSelectedServices() {
 
   }, []);
 
-
   return [
     {
       listOfSubscribedServices,

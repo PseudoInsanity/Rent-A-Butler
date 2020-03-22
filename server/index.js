@@ -44,8 +44,12 @@ app.put("/service", jsonParser, (req, res) => {
     mongo.changeSubscriber(req, res);
 });
 
-app.get("/service/:userId", (req, res) => {
+app.post("/service/:userId", jsonParser, (req, res) => {
 
+    mongo.addSubscription(req, res);
+});
+
+app.get("/service/:userId", (req, res) => {
     mongo.getUserSubscriptions(req.params.userId, res);
 });
 

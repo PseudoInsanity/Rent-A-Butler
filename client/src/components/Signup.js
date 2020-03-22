@@ -71,6 +71,7 @@ function Signup() {
         userName: '',
         password: ''
     });
+    let successfullSignup = false;
 
     const handleChange = prop => event => {
         setValues({ ...values, [prop]: event.target.value });
@@ -90,6 +91,7 @@ function Signup() {
                 user => {
                     history.push('/login');
                     console.log(user);
+                    successfullSignup = true;
                 },
                 error => setValues({ error, loading: false })
             );
@@ -172,6 +174,7 @@ function Signup() {
                     </Grid>
                     <Grid container justify="center">
                         <Grid item>
+                            {successfullSignup ? <Typography>Successfully signed in!</Typography> : <Typography>Try again</Typography>}
                             <Link to="/" variant="body2">
                                 Already have an account? Sign in
                             </Link>

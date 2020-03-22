@@ -11,7 +11,7 @@ const ButlerCardExpand = ( { expanded, rating }) => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
             <Typography>Rating:</Typography>
-            <Rating name="read-only" mb={3} readOnly value={rating}></Rating>
+            <Rating name="read-only" mb={2} readOnly value={rating}></Rating>
         </CardContent>
         </Collapse>
     )

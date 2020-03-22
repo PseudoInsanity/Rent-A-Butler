@@ -108,6 +108,8 @@ function StartPage() {
                 ...listOfSubscribedServices,
                 subscribedService
             ]);
+
+            userService.subscribeToService(subscribedService);
         }
     };
 
@@ -120,7 +122,7 @@ function StartPage() {
 
     const handleAddService = () => {
         const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
-        const img_url = userFromLocalStorage[0].user.img_url;
+        const img_url = userFromLocalStorage[0].img_url;
         const { serviceName, serviceDescription, servicePrice } = addedService;
 
         if (!(serviceName && serviceDescription && servicePrice)) {
@@ -129,12 +131,10 @@ function StartPage() {
 
         setListOfAddedServices([
             ...listOfAddedServices,
-            serviceName, serviceDescription, userFromLocalStorage[0].user.userName, userFromLocalStorage[0].user._id, img_url
+            serviceName, serviceDescription, userFromLocalStorage[0].userName, userFromLocalStorage[0]._id, img_url
         ]);
 
-
-
-        userService.addServiceToDatabase(serviceName, serviceDescription, servicePrice, userFromLocalStorage[0].user.userName, userFromLocalStorage[0].user._id, img_url);
+        userService.addServiceToDatabase(serviceName, serviceDescription, servicePrice, userFromLocalStorage[0].userName, userFromLocalStorage[0]._id, img_url);
         setOpen(false);
     }
 

@@ -70,6 +70,20 @@ module.exports = {
     });
   },
 
+  addSubscription: function (req, res) {
+    var newUser = req.body;
+    var structeredUser = { firstName: newUser.firstName, lastName: newUser.lastName, userName: newUser.userName, password: newUser.password };
+
+    db.collection("users").insertOne(structeredUser, function (err, item) {
+      if (err) {
+        res.send({ success: 0 });
+      } else if (item) {
+        res.send({ success: 1 });
+      }
+    });
+
+  },
+
   getUserSubscriptions: function (req, res) {
 
     var result = [];

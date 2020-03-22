@@ -121,7 +121,7 @@ function Appbar({ listOfSubscribedServices, allServices }) {
       <Divider />
       <List>
         {allServices.length > 0
-          ? allServices.filter(item => item.userId === userFromLocalStorage[0].user._id).map((item, index) => <ListItem key={index} divider> <ListItemText /> <Typography className={classes.username} >{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
+          ? allServices.filter(item => item.userId === userFromLocalStorage[0]._id).map((item, index) => <ListItem key={index} divider> <ListItemText /> <Typography className={classes.username} >{`${item.serviceName} by ${item.userName}`}</Typography> </ListItem>)
           : <Typography className={classes.listTitle} variant="h6">You don't provide any services yet!</Typography>}
       </List>
     </Menu >
