@@ -41,11 +41,6 @@ app.get("/service", jsonParser, (req, res) => {
 
 app.put("/service", jsonParser, (req, res) => {
 
-    mongo.changeSubscriber(req, res);
-});
-
-app.post("/service/:userId", jsonParser, (req, res) => {
-
     mongo.addSubscription(req, res);
 });
 
@@ -53,8 +48,11 @@ app.get("/service/:userId", (req, res) => {
     mongo.getUserSubscriptions(req.params.userId, res);
 });
 
+app.delete("/service/:userId/:serviceId", (req, res) => {
+    mongo.removeSubscription(req, res);
+});
+
 app.post("/createUser", jsonParser, (req, res) => {
-    console.log('userCreated!')
     mongo.createUser(req, res);
 });
 

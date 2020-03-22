@@ -21,7 +21,6 @@ module.exports = {
   addService: function (req, res) {
 
     var myObj = req.body;
-    myObj.subscriber = "None";
     db.collection("services").insertOne(myObj, function (err, item) {
       if (err) {
         res.send({ success: 0 });
@@ -37,9 +36,7 @@ module.exports = {
     var cursor = db.collection("services").find();
     cursor.forEach(function (doc, err) {
       assert.equal(null, err);
-      if (doc.subscriber === "None") {
         result.push(doc);
-      }
     }, function () {
       res.send(result);
     });
@@ -57,15 +54,26 @@ module.exports = {
     });
   },
 
-  changeSubscriber: function (req, res) {
+  addSubscription: function (req, res) {
 
-    var myquery = { _id: ObjectId(req.body.serviceId) };
-    var newvalues = { $set: { subscriber: req.body.userId } };
-    db.collection("services").updateOne(myquery, newvalues, function (err, item) {
-      if (err || !item.result.nModified) {
-        res.send({ success: 0 });
-      } else if (item.result.nModified) {
-        res.send({ success: 1 });
+    var serId = req.body.serviceId.toString();
+    var myquery = { _id: ObjectId(req.body.userId) };
+    var newvalues = { $push: { subscriptions: serId } };
+    db.collection("users").updateOne(myquery, newvalues, function (err, item) {
+      if (err) {res.send({success:0});} else {
+        res.send({success:1});
+      }
+    });
+  },
+
+  removeSubscription: function(req, res) {
+
+    var serId = req.params.serviceId.toString();
+    var myquery = { _id: ObjectId(req.params.userId) };
+    var newvalues = { $pull: { subscriptions: serId } };
+    db.collection("users").updateOne(myquery, newvalues, function (err, item) {
+      if (err) {res.send({success:0});} else {
+        res.send({success:1});
       }
     });
   },
@@ -73,27 +81,15 @@ module.exports = {
   getUserSubscriptions: function (req, res) {
 
     var result = [];
-    var cursor = db.collection("services").find({}, {subscriptions: res});
-    cursor.forEach(function (doc, err) {
-      assert.equal(null, err);
-      if (doc.subscriber === req) {
-        result.push(doc);
-      }
-    }, function () {
-      if (result.length > 0) {
-
-        res.send(result);
-
-      } else {
-
-        res.send({ success: 0 });
-      }
+    db.collection("users").find({_id: ObjectId(req)}).toArray(function (err, user) {
+      if (err) throw err;
+      res.send(user[0].subscriptions);
     });
   },
 
   createUser: function (req, res) {
     var newUser = req.body;
-    var structeredUser = { firstName: newUser.firstName, lastName: newUser.lastName, userName: newUser.userName, password: newUser.password };
+    var structeredUser = { firstName: newUser.firstName, lastName: newUser.lastName, userName: newUser.userName, password: newUser.password, subscriptions: [] };
 
     db.collection("users").insertOne(structeredUser, function (err, item) {
       if (err) {
