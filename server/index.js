@@ -58,12 +58,6 @@ app.post("/login", jsonParser, (req, res) => {
     mongo.login(req, res);
 });
 
-app.get("/users", jsonParser, (req, res) => {
-    console.log('request here')
-    mongo.getUsers(res);
-});
-
-
 app.set("view engine", "ejs");
 app.use(middleware.logIncomingToConsole);
 app.listen(port, logStartUpDetailsToConsole);
