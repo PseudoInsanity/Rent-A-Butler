@@ -106,24 +106,24 @@ module.exports = {
 
   login: function (req, res) {
     var userAuth = req.body;
+  
+    var credentialMatch = false;
     var response = [];
-    db.collection('users').findOne({ username: req.body.username }, function (err, user) {
-
-      console.log(`This is userAuth: ${req.body.username}`)
-      console.log(`This is username in db:${user.userName}  This is password in db:${user.password}`);
-      console.log(`This is req username:${req.body.userName} This is req password:${req.body.password}`);
-
-      if (err) {
-        res.send({ success: 0 })
-        console.log(err);
+    var cursor = db.collection('users').find();
+    cursor.forEach(function (doc, err) {
+      assert.equal(null, err);
+      if (doc.userName === userAuth.userName && doc.password === userAuth.password) {
+        credentialMatch = true;
+        response.push(doc);
       }
-      if (user && user.password === req.body.password && user && user.userName === req.body.userName) {
-        response.push({ success: 1, user});
+    }, function () {
+      if (credentialMatch) {
+        response.push({ success: 1 });
         res.send(response);
-        console.log(response)
+
       } else {
-        res.send({ success: 0 });
-        console.log('fail');
+
+        res.send({success: 0});
       }
     });
   }
